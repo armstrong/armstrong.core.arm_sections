@@ -1,0 +1,6 @@
+*.pyc
+*~
+*.swp
+coverage/*
+build/*
+mydatabase
