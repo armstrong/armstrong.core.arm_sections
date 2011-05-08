@@ -6,10 +6,58 @@ Provides the basic concept of sections within an Armstrong site.
              familiar with what that means and are comfortable using that type
              of software.
 
+Sections give you a way to organize your content into logical groups.  Sections
+can have a parent section to allow you to create a hierarchy.  For example, the
+`Texas Tribune`_ has an Immigration section which in turns has Sanctuary Cities
+and Dream Act as children sections.
+
+Of course, you can create a flat infrastructure too if you would like.  Simply
+ignore the parent/child features present.  The parent/child relationship is
+managed through a `django-mptt`_ using a technique called *modified preordered
+tree traversal*.
+
+
 Usage
 -----
 
-**TODO**
+You need to add a ``section`` field to any model that you would like to show up
+in a given section.  For example::
+
+    # your models.py
+    from django.db import models
+    from armstrong.core.arm_sections.models import Section
+
+
+    class MyArticle(models.Model):
+        title = models.CharField(max_length=100)
+        body = models.TextField()
+
+        section = models.ForeignKey(Section)
+
+You can also relate to multiple sections as well through a ``ManyToManyField``.
+
+
+Getting Items in a Section
+""""""""""""""""""""""""""
+
+Sections provide a property called ``items`` which allow you to access all of
+the items associated with them.  ``items`` is powered by a backend
+infrastructure so it can look at the most efficient place to figure out how to
+get what is associated with it.
+
+The easiest to set up is the standard database-powered QuerySet.  The default
+one is configurable by the following settings::
+
+    ARMSTRONG_SECTIONS_QUERYSET_BACKEND = {
+        "_default": "myapp.models.SomeModel",
+        "immigration": "other.models.SomeOtherModel",
+    }
+
+By default, this loads the ``objects`` property on this model and attempts to
+call ``by_section(<section.slug>)`` to determine which models are available
+for the given section.
+
+*Note*: There are plans for providing additional backends by default.
 
 Installation
 ------------
