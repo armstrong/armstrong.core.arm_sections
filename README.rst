@@ -41,23 +41,35 @@ Getting Items in a Section
 """"""""""""""""""""""""""
 
 Sections provide a property called ``items`` which allow you to access all of
-the items associated with them.  ``items`` is powered by a backend
-infrastructure so it can look at the most efficient place to figure out how to
-get what is associated with it.
+the items associated with them.  ``items`` is powered by backends so it can
+look at the most efficient place to figure out how to get what is associated
+with it.
 
 The easiest to set up is the standard database-powered QuerySet.  The default
 one is configurable by the following settings::
 
+    # Default model to use 
+    ARMSTRONG_SECTIONS_QUERYSET_BACKEND = "mysite.models.MyContent"
+
+You can also set a per-slug QuerySet to swap out what QuerySet you use for each
+type of Section.
+
+::
+
+    # 
     ARMSTRONG_SECTIONS_QUERYSET_BACKEND = {
-        "_default": "myapp.models.SomeModel",
         "immigration": "other.models.SomeOtherModel",
+        "immigration/dream-act": "other.models.YetAnotherModel",
+        "immigration/sanctuary-cities": "other.utils.some_callable",
     }
 
-By default, this loads the ``objects`` property on this model and attempts to
-call ``by_section(<section.slug>)`` to determine which models are available
-for the given section.
+If the provided us callable, it will be executed and passed ``Section`` object
+that is trying to find its ``items``.  If it's not executable, it will attempt
+to an ``objects`` property on the class (normally a model) and attempt to call
+``by_section(<section.slug>)`` to determine which models are available for the
+given section.
 
-*Note*: There are plans for providing additional backends by default.
+*Note*: Additional backends are planned.
 
 Installation
 ------------
@@ -114,3 +126,4 @@ limitations under the License.
 .. _Google Group: http://groups.google.com/group/armstrongcms
 .. _pull request: http://help.github.com/pull-requests/
 .. _Fork it: http://help.github.com/forking/
+.. _django-mptt: https://github.com/django-mptt/django-mptt
