@@ -63,6 +63,11 @@ type of Section.
         "immigration/sanctuary-cities": "other.utils.some_callable",
     }
 
+The keys are the full slug of a given ``Section``.  Slugs are determined by
+joining the slug with all of the slugs of its parents.  For example,
+``sanctuary-cities`` is the slug for the ``Section`` that is a child of the
+``Section`` with a slug of ``immigration``.
+
 If the provided us callable, it will be executed and passed ``Section`` object
 that is trying to find its ``items``.  If it's not executable, it will attempt
 to an ``objects`` property on the class (normally a model) and attempt to call
