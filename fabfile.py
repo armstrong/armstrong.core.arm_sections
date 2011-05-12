@@ -23,6 +23,15 @@ tested_apps = (main_app, )
 
 @task
 def lettuce(verbosity=4):
-    v.run(settings)
+    defaults = settings
+    defaults["DATABASES"] = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:",
+        },
+    }
+    v = VirtualEnvironment()
+    v.run(defaults)
+    v.call_command("syncdb", interactive=False)
     v.call_command("harvest", apps='armstrong.core.arm_sections',
             verbosity=verbosity)
