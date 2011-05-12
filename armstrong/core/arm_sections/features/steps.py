@@ -9,6 +9,8 @@ from armstrong.core.arm_sections.models import Section
 @before.each_scenario
 def teardown_scenario(scenario):
     Section.objects.all().delete()
+    world.sections = []
+
 
 @step(u'Given I have the following Sections:')
 def given_i_have_the_following_sections(step):
@@ -30,8 +32,7 @@ def given_i_have_the_following_sections(step):
 @step(u'I query for a section by slug "(.*)"')
 def retrieve_by_slug(step, slug):
     # TODO: fix this
-    slug = slug.split("/")[-1]
-    world.section = Section.objects.get(slug=slug)
+    world.section = Section.objects.get(full_slug=slug)
 
 
 @step(u'I should have a Section with the following fields:')
@@ -62,7 +63,7 @@ def start_monitoring_queries(step):
 
 @step(u'I retrieve the children')
 def retrieve_section_children(step):
-    world.children = world.section.get_descendants()
+    world.sections = world.section.get_descendants()
 
 
 @step(u'I retrieve the section\'s parent')
@@ -73,7 +74,8 @@ def retrieve_section_parent(step):
 @step(u'Then I should have the following sections:')
 def then_i_should_have_the_following_sections(step):
     counter = 0
-    for child in world.children:
+
+    for child in world.sections:
         row = step.hashes[counter]
         for key, value in row.items():
             if "__" in key:
@@ -82,11 +84,11 @@ def then_i_should_have_the_following_sections(step):
                 rel, key = key.split("__")
                 related = getattr(child, rel, None)
                 if value is None:
-                    assert related is None
+                    assert related is None, "child.%s is not Nones" % rel
                 else:
                     assert getattr(related, key) == value
             else:
-                assert getattr(child, key) == value, "child.%s == %s" % (key, value)
+                assert getattr(child, key) == value, "(%s) child.%s == %s" % (child.title, key, value)
         counter += 1
 
 
@@ -98,3 +100,14 @@ def and_only_1_query_should_have_been_run(step, num_queries, *args, **kwargs):
     world.connection.use_debug_cursor = world.old_debug_cursor
     assert queries_run == num_queries, "%s not equal to %s" % (queries_run,
             num_queries)
+
+
+@step(u'I change the slug to "(.*)"')
+def change_slug(step, new_slug):
+    world.section.slug = new_slug
+    world.section.save()
+
+
+@step(u'I load all sections')
+def load_all_sessions(step):
+    world.sections = Section.objects.all()
