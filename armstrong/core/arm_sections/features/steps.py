@@ -3,6 +3,7 @@ from copy import copy
 from django.conf import settings
 from django.db import connections
 from django.db import DEFAULT_DB_ALIAS
+import fudge
 from lettuce import *
 from armstrong.core.arm_sections.models import Section
 
@@ -156,3 +157,34 @@ def then_i_should_have_the_following_model(step):
         assert row["model"] == item.__class__.__name__
         assert row["title"] == item.title
         counter += 1
+
+
+class FakeBackendBorg(object):
+    _shared_state = {
+        "args": None,
+        "call_count": 0,
+    }
+
+    def __init__(self):
+        self.__dict__ = FakeBackendBorg._shared_state
+
+    def __call__(self, *args):
+        self.args = args
+        self.call_count += 1
+
+
+fake_backend = FakeBackendBorg()
+
+
+@step(u'I have a fake backend configured for items')
+def configure_fake_backend(step):
+    settings.ARMSTRONG_SECTION_ITEM_BACKEND = 'steps.fake_backend'
+
+    assert fake_backend.args is None, "sanity check"
+    assert fake_backend.call_count is 0, "sanity check"
+
+
+@step(u'the fake backend should have been called')
+def then_the_fake_backend_should_have_been_called(step):
+    assert fake_backend.call_count is 1
+    assert fake_backend.args[0] == world.section

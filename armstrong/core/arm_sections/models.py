@@ -4,25 +4,6 @@ from mptt.models import MPTTModel
 from mptt.fields import TreeForeignKey
 
 
-def find_related_models(section):
-    rel = None
-    relateds = section._meta.get_all_related_objects()
-    for related in relateds:
-        found = "%s.%s" % (related.model.__module__,
-                related.model.__name__)
-        if found == settings.ARMSTRONG_SECTION_ITEM_MODEL:
-            rel = related
-            break
-    kwargs = {rel.field.name: section}
-    try:
-        qs = rel.model.objects.filter(**kwargs)
-    except Exception, e:
-        import ipdb;ipdb.set_trace()
-    if hasattr(qs, 'select_subclasses'):
-        qs = qs.select_subclasses()
-    return qs
-
-
 class SectionManager(models.Manager):
     def get(self, **kwargs):
         defaults = {}
@@ -45,7 +26,11 @@ class Section(MPTTModel):
 
     @property
     def items(self):
-        return find_related_models(self)
+        backend = getattr(settings, "ARMSTRONG_SECTION_ITEM_BACKEND",
+                "armstrong.core.arm_sections.backends.find_related_models")
+        module, func = backend.rsplit('.', 1)
+        m = __import__(module, globals(), locals(), module)
+        return getattr(m, func)(self)
 
     def save(self, *args, **kwargs):
         orig_full_slug = self.full_slug

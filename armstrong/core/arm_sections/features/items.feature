@@ -58,3 +58,13 @@ Feature: Retrieving Items for Section
     Then I should have the following model:
       | model            | title             |
       | NonStandardField | Some random title |
+
+  Scenario: Uses backends to get items
+    Given I have a "NonStandardField" model registered with the backends
+    And I have the following Sections:
+      | title   | slug      | summary           |
+      | Sports  | sports    | All about sports  |
+    And I have a fake backend configured for items
+    When I query for a section by slug "sports/"
+    And I load the section's items
+    Then the fake backend should have been called
