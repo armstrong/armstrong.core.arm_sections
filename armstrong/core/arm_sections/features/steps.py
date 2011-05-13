@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from copy import copy
+from django.conf import settings
 from django.db import connections
 from django.db import DEFAULT_DB_ALIAS
 from lettuce import *
@@ -9,10 +10,18 @@ from armstrong.core.arm_sections.models import Section
 @before.each_scenario
 def teardown_scenario(scenario):
     Section.objects.all().delete()
+    world.created = []
     world.sections = []
+    world.original_settings = copy(settings)
 
 
-@step(u'Given I have the following Sections:')
+@after.each_scenario
+def restore_settings(scenario):
+    settings = world.original_settings
+    [a.delete() for a in world.created]
+
+
+@step(u'I have the following Sections:')
 def given_i_have_the_following_sections(step):
     world.sections = []
     parent = False
@@ -111,3 +120,33 @@ def change_slug(step, new_slug):
 @step(u'I load all sections')
 def load_all_sessions(step):
     world.sections = Section.objects.all()
+
+
+@step(u'Given I have a Common model registered with the backends')
+def setup_common_model(step):
+    settings.ARMSTRONG_SECTION_ITEM_MODEL = "armstrong.core.arm_sections.tests.arm_sections_support.models.Common"
+
+
+@step(u'I have the following models from support app:')
+def and_i_have_the_following_models_from_support_app(step):
+    from armstrong.core.arm_sections.tests.arm_sections_support import models
+    for row in step.hashes:
+        cls = getattr(models, row['model'])
+        world.created.append(cls.objects.create(title=row['title'],
+            section=world.section))
+
+
+@step(u"I load the section's items")
+def and_i_load_the_section_s_items(step):
+    world.items = world.section.items
+
+
+@step(u'Then I should have the following model:')
+def then_i_should_have_the_following_model(step):
+    assert len(world.items) == len(step.hashes)
+    counter = 0
+    for item in world.items:
+        row = step.hashes[counter]
+        assert row["model"] == item.__class__.__name__
+        assert row["title"] == item.title
+        counter += 1
