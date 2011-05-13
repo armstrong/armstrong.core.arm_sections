@@ -16,9 +16,9 @@ class SectionManager(models.Manager):
 
 class Section(MPTTModel):
     title = models.CharField(max_length=255)
-    summary = models.TextField()
+    summary = models.TextField(default="", blank=True)
     slug = models.SlugField()
-    full_slug = models.CharField(max_length=255)
+    full_slug = models.CharField(max_length=255, blank=True)
 
     parent = TreeForeignKey('self', null=True, blank=True)
 
@@ -43,3 +43,6 @@ class Section(MPTTModel):
             for child in self.get_children():
                 child.save()
         return obj
+
+    def __unicode__(self):
+        return "%s (%s)" % (self.title, self.full_slug)
