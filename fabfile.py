@@ -15,7 +15,9 @@ settings = {
         'armstrong.core.arm_sections.tests.arm_sections_support',
         'lettuce.django',
         'south',
+        'mptt',
     ),
+    'ROOT_URLCONF': 'armstrong.core.arm_sections.tests.arm_sections_support.urls',
     'SITE_ID': 1,
 }
 
