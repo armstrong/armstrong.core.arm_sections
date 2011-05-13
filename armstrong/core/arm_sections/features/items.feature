@@ -3,7 +3,7 @@ Feature: Retrieving Items for Section
   I need to be able to retrieve the items that are related to a Section
 
   Scenario: Using common model backend
-    Given I have a Common model registered with the backends
+    Given I have a "Common" model registered with the backends
     And I have the following Sections:
       | title   | slug      | summary           |
       | Local   | local     | All about local   |
@@ -21,3 +21,23 @@ Feature: Retrieving Items for Section
       | Article | Baseball dunks basket         |
       | Article | Basketball team hits home run |
       | Photo   | Football team sinks 30' putt  |
+
+  Scenario: Basic backend works with regular manager
+    Given I have a "SimpleCommon" model registered with the backends
+    And I have the following Sections:
+      | title   | slug      | summary           |
+      | Local   | local     | All about local   |
+      | Sports  | sports    | All about sports  |
+      | Weather | weather   | All about weather |
+    And I have the following models from support app:
+      | model   | title                         |
+      | SimpleArticle | Baseball dunks basket         |
+      | SimpleArticle | Basketball team hits home run |
+      | SimplePhoto   | Football team sinks 30' putt  |
+    When I query for a section by slug "sports/"
+    And I load the section's items
+    Then I should have the following model:
+      | model        | title                         |
+      | SimpleCommon | Baseball dunks basket         |
+      | SimpleCommon | Basketball team hits home run |
+      | SimpleCommon | Football team sinks 30' putt  |

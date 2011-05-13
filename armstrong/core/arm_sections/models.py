@@ -13,7 +13,10 @@ def find_related_models(section):
         if found == settings.ARMSTRONG_SECTION_ITEM_MODEL:
             rel = related
             break
-    return rel.model.objects.filter(section=section).select_subclasses()
+    qs = rel.model.objects.filter(section=section)
+    if hasattr(qs, 'select_subclasses'):
+        qs = qs.select_subclasses()
+    return qs
 
 
 class SectionManager(models.Manager):

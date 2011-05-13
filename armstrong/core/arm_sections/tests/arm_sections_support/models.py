@@ -16,3 +16,16 @@ class Article(Common):
 
 class Photo(Common):
     url = models.URLField(default="http://localhost/", blank=True)
+
+
+class SimpleCommon(models.Model):
+    title = models.CharField(max_length=20)
+    section = models.ForeignKey(Section)
+
+
+class SimpleArticle(SimpleCommon):
+    summary = models.TextField(default="Default", blank=True)
+
+
+class SimplePhoto(SimpleCommon):
+    url = models.URLField(default="http://localhost/", blank=True)

@@ -122,9 +122,9 @@ def load_all_sessions(step):
     world.sections = Section.objects.all()
 
 
-@step(u'Given I have a Common model registered with the backends')
-def setup_common_model(step):
-    settings.ARMSTRONG_SECTION_ITEM_MODEL = "armstrong.core.arm_sections.tests.arm_sections_support.models.Common"
+@step(u'Given I have a "(.*)" model registered with the backends')
+def setup_common_model(step, model):
+    settings.ARMSTRONG_SECTION_ITEM_MODEL = "armstrong.core.arm_sections.tests.arm_sections_support.models.%s" % model
 
 
 @step(u'I have the following models from support app:')
