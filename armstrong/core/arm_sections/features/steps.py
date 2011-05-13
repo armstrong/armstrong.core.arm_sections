@@ -131,11 +131,15 @@ def setup_common_model(step, model):
 def and_i_have_the_following_models_from_support_app(step):
     from armstrong.core.arm_sections.tests.arm_sections_support import models
     for row in step.hashes:
+        section = Section.objects.get(slug=row["section"])
         cls = getattr(models, row['model'])
         rel = [a[0] for a in cls._meta.get_fields_with_model() \
                 if a[0].__class__.__name__ == 'ForeignKey'][0]
-        kwargs = {"title": row["title"], rel.name: world.section}
-        world.created.append(cls.objects.create(**kwargs))
+        kwargs = {"title": row["title"], rel.name: section, }
+        try:
+            world.created.append(cls.objects.create(**kwargs))
+        except Exception, e:
+            import ipdb;ipdb.set_trace()
 
 
 @step(u"I load the section's items")

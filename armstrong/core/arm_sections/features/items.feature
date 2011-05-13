@@ -10,10 +10,10 @@ Feature: Retrieving Items for Section
       | Sports  | sports    | All about sports  |
       | Weather | weather   | All about weather |
     And I have the following models from support app:
-      | model   | title                         |
-      | Article | Baseball dunks basket         |
-      | Article | Basketball team hits home run |
-      | Photo   | Football team sinks 30' putt  |
+      | model   | title                         | section |
+      | Article | Baseball dunks basket         | sports  |
+      | Article | Basketball team hits home run | sports  |
+      | Photo   | Football team sinks 30' putt  | sports  |
     When I query for a section by slug "sports/"
     And I load the section's items
     Then I should have the following model:
@@ -30,10 +30,11 @@ Feature: Retrieving Items for Section
       | Sports  | sports    | All about sports  |
       | Weather | weather   | All about weather |
     And I have the following models from support app:
-      | model   | title                         |
-      | SimpleArticle | Baseball dunks basket         |
-      | SimpleArticle | Basketball team hits home run |
-      | SimplePhoto   | Football team sinks 30' putt  |
+      | model         | title                          | section |
+      | SimpleArticle | Baseball dunks basket          | sports  |
+      | SimpleArticle | Basketball team hits home run  | sports  |
+      | SimplePhoto   | Football team sinks 30' putt   | sports  |
+      | SimpleArticle | Local mayor voted best citizen | local   |
     When I query for a section by slug "sports/"
     And I load the section's items
     Then I should have the following model:
@@ -50,8 +51,8 @@ Feature: Retrieving Items for Section
       | Sports  | sports    | All about sports  |
       | Weather | weather   | All about weather |
     And I have the following models from support app:
-      | model            | title             |
-      | NonStandardField | Some random title |
+      | model            | title             | section |
+      | NonStandardField | Some random title | sports  |
     When I query for a section by slug "sports/"
     And I load the section's items
     Then I should have the following model:
