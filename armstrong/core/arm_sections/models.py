@@ -13,7 +13,11 @@ def find_related_models(section):
         if found == settings.ARMSTRONG_SECTION_ITEM_MODEL:
             rel = related
             break
-    qs = rel.model.objects.filter(section=section)
+    kwargs = {rel.field.name: section}
+    try:
+        qs = rel.model.objects.filter(**kwargs)
+    except Exception, e:
+        import ipdb;ipdb.set_trace()
     if hasattr(qs, 'select_subclasses'):
         qs = qs.select_subclasses()
     return qs

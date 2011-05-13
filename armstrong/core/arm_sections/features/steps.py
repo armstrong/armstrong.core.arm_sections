@@ -132,8 +132,10 @@ def and_i_have_the_following_models_from_support_app(step):
     from armstrong.core.arm_sections.tests.arm_sections_support import models
     for row in step.hashes:
         cls = getattr(models, row['model'])
-        world.created.append(cls.objects.create(title=row['title'],
-            section=world.section))
+        rel = [a[0] for a in cls._meta.get_fields_with_model() \
+                if a[0].__class__.__name__ == 'ForeignKey'][0]
+        kwargs = {"title": row["title"], rel.name: world.section}
+        world.created.append(cls.objects.create(**kwargs))
 
 
 @step(u"I load the section's items")

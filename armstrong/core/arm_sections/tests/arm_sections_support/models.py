@@ -29,3 +29,8 @@ class SimpleArticle(SimpleCommon):
 
 class SimplePhoto(SimpleCommon):
     url = models.URLField(default="http://localhost/", blank=True)
+
+
+class NonStandardField(models.Model):
+    title = models.CharField(max_length=20)
+    sections_by_another_name = models.ForeignKey(Section)
