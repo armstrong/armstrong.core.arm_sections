@@ -6,10 +6,75 @@ Provides the basic concept of sections within an Armstrong site.
              familiar with what that means and are comfortable using that type
              of software.
 
+Sections give you a way to organize your content into logical groups.  Sections
+can have a parent section to allow you to create a hierarchy.  For example, the
+`Texas Tribune`_ has an Immigration section which in turns has Sanctuary Cities
+and Dream Act as children sections.
+
+Of course, you can create a flat infrastructure too if you would like.  Simply
+ignore the parent/child features present.  The parent/child relationship is
+managed through a `django-mptt`_ using a technique called *modified preordered
+tree traversal*.
+
+
 Usage
 -----
 
-**TODO**
+You need to add a ``section`` field to any model that you would like to show up
+in a given section.  For example::
+
+    # your models.py
+    from django.db import models
+    from armstrong.core.arm_sections.models import Section
+
+
+    class MyArticle(models.Model):
+        title = models.CharField(max_length=100)
+        body = models.TextField()
+
+        section = models.ForeignKey(Section)
+
+You can also relate to multiple sections as well through a ``ManyToManyField``.
+
+
+Getting Items in a Section
+""""""""""""""""""""""""""
+
+Sections provide a property called ``items`` which allow you to access all of
+the items associated with them.  ``items`` is powered by backends so it can
+look at the most efficient place to figure out how to get what is associated
+with it.
+
+The easiest to set up is the standard database-powered QuerySet.  The default
+one is configurable by the following settings::
+
+    # Default model to use 
+    ARMSTRONG_SECTIONS_QUERYSET_BACKEND = "mysite.models.MyContent"
+
+You can also set a per-slug QuerySet to swap out what QuerySet you use for each
+type of Section.
+
+::
+
+    # 
+    ARMSTRONG_SECTIONS_QUERYSET_BACKEND = {
+        "immigration": "other.models.SomeOtherModel",
+        "immigration/dream-act": "other.models.YetAnotherModel",
+        "immigration/sanctuary-cities": "other.utils.some_callable",
+    }
+
+The keys are the full slug of a given ``Section``.  Slugs are determined by
+joining the slug with all of the slugs of its parents.  For example,
+``sanctuary-cities`` is the slug for the ``Section`` that is a child of the
+``Section`` with a slug of ``immigration``.
+
+If the provided us callable, it will be executed and passed ``Section`` object
+that is trying to find its ``items``.  If it's not executable, it will attempt
+to an ``objects`` property on the class (normally a model) and attempt to call
+``by_section(<section.slug>)`` to determine which models are available for the
+given section.
+
+*Note*: Additional backends are planned.
 
 Installation
 ------------
@@ -66,3 +131,4 @@ limitations under the License.
 .. _Google Group: http://groups.google.com/group/armstrongcms
 .. _pull request: http://help.github.com/pull-requests/
 .. _Fork it: http://help.github.com/forking/
+.. _django-mptt: https://github.com/django-mptt/django-mptt
