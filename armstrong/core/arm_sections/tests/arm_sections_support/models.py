@@ -1,3 +1,4 @@
+from armstrong.core.arm_sections.managers import SectionSlugManager
 from armstrong.core.arm_sections.models import Section
 from django.db import models
 from model_utils.managers import InheritanceManager
@@ -5,9 +6,11 @@ from model_utils.managers import InheritanceManager
 
 class Common(models.Model):
     title = models.CharField(max_length=20)
-    section = models.ForeignKey(Section)
+    primary_section = models.ForeignKey(Section)
+    slug = models.SlugField()
 
     objects = InheritanceManager()
+    with_section = SectionSlugManager()
 
 
 class Article(Common):
@@ -20,7 +23,11 @@ class Photo(Common):
 
 class SimpleCommon(models.Model):
     title = models.CharField(max_length=20)
-    section = models.ForeignKey(Section)
+    primary_section = models.ForeignKey(Section)
+    slug = models.SlugField()
+
+    objects = models.Manager()
+    with_section = SectionSlugManager()
 
 
 class SimpleArticle(SimpleCommon):
@@ -34,3 +41,8 @@ class SimplePhoto(SimpleCommon):
 class NonStandardField(models.Model):
     title = models.CharField(max_length=20)
     sections_by_another_name = models.ForeignKey(Section)
+    slugs_by_another_name = models.SlugField()
+
+    objects = models.Manager()
+    with_section = SectionSlugManager(section_field="sections_by_another_name",
+            slug_field="slugs_by_another_name")

@@ -11,6 +11,8 @@ from armstrong.core.arm_sections.models import Section
 @before.each_scenario
 def teardown_scenario(scenario):
     Section.objects.all().delete()
+    world.exception = None
+    world.model_class = None
     world.created = []
     world.sections = []
     world.original_settings = copy(settings)
@@ -137,10 +139,9 @@ def and_i_have_the_following_models_from_support_app(step):
         rel = [a[0] for a in cls._meta.get_fields_with_model() \
                 if a[0].__class__.__name__ == 'ForeignKey'][0]
         kwargs = {"title": row["title"], rel.name: section, }
-        try:
-            world.created.append(cls.objects.create(**kwargs))
-        except Exception, e:
-            import ipdb;ipdb.set_trace()
+        if "slug" in row:
+            kwargs["slug"] = row["slug"]
+        world.created.append(cls.objects.create(**kwargs))
 
 
 @step(u"I load the section's items")
@@ -150,11 +151,13 @@ def and_i_load_the_section_s_items(step):
 
 @step(u'Then I should have the following model:')
 def then_i_should_have_the_following_model(step):
+    assert world.exception is None, "sanity check: %s" % type(world.exception)
     assert len(world.items) == len(step.hashes)
     counter = 0
     for item in world.items:
         row = step.hashes[counter]
-        assert row["model"] == item.__class__.__name__
+        assert row["model"] == item.__class__.__name__, "%s != %s" % (
+                row["model"], item.__class__.__name__)
         assert row["title"] == item.title
         counter += 1
 
@@ -188,3 +191,32 @@ def configure_fake_backend(step):
 def then_the_fake_backend_should_have_been_called(step):
     assert fake_backend.call_count is 1
     assert fake_backend.args[0] == world.section
+
+
+@step(u'I query "(.*)" with the full slug "(.*)"')
+def query_by_full_slug(step, model_name, slug):
+    from armstrong.core.arm_sections.tests.arm_sections_support import models
+    world.model_class = getattr(models, model_name)
+    try:
+        world.items = [world.model_class.with_section.get_by_slug(slug)]
+    except Exception, e:
+        world.exception = e
+
+
+@step(u'I should have caught a "(.*)" exception')
+def then_i_should_have_caught_a_group1_exception(step, exception_name):
+    assert world.exception is not None, "sanity check"
+    exception = getattr(world.model_class, exception_name)
+    assert isinstance(world.exception, exception), "%s is not a %s" % (
+            world.exception.__class__.__name__, exception.__class__.__name__)
+
+
+@step(u'And I have the following NonStandardField models:')
+def and_i_have_the_following_nonstandardfield_models(step):
+    from armstrong.core.arm_sections.tests.arm_sections_support import models
+    for row in step.hashes:
+        section = Section.objects.get(slug=row["section"])
+        models.NonStandardField.objects.create(title=row["title"],
+            sections_by_another_name=section,
+            slugs_by_another_name=row["slug"]
+        )
