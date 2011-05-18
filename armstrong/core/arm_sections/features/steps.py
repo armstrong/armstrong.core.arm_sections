@@ -139,10 +139,7 @@ def and_i_have_the_following_models_from_support_app(step):
         kwargs = {"title": row["title"], rel.name: section, }
         if "slug" in row:
             kwargs["slug"] = row["slug"]
-        try:
-            world.created.append(cls.objects.create(**kwargs))
-        except Exception, e:
-            import ipdb;ipdb.set_trace()
+        world.created.append(cls.objects.create(**kwargs))
 
 
 @step(u"I load the section's items")
