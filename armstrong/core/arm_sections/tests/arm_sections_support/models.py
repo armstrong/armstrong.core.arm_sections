@@ -41,3 +41,8 @@ class SimplePhoto(SimpleCommon):
 class NonStandardField(models.Model):
     title = models.CharField(max_length=20)
     sections_by_another_name = models.ForeignKey(Section)
+    slugs_by_another_name = models.SlugField()
+
+    objects = models.Manager()
+    with_section = SectionSlugManager(section_field="sections_by_another_name",
+            slug_field="slugs_by_another_name")

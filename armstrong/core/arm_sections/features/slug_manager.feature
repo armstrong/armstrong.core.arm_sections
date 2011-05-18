@@ -49,5 +49,22 @@ Feature: Getting models with full slug
       | Article | Baseball dunks basket         | sports  | baseball-team   |
       | Article | Basketball team hits home run | sports  | basketball-team |
       | Photo   | Football team sinks 30' putt  | sports  | football-team   |
-    When I query "Common" with the full slug "unknown/and/unknowable/"
+    When I query "Common" with the full slug "unknown/and/unknowable"
     Then I should have caught a "DoesNotExist" exception
+
+  Scenario: Works with non-standard field names
+    Given I have a "Common" model registered with the backends
+    And I have the following Sections:
+      | title   | slug      | summary           |
+      | Local   | local     | All about local   |
+      | Sports  | sports    | All about sports  |
+      | Weather | weather   | All about weather |
+    And I have the following NonStandardField models:
+      | title                         | section | slug            |
+      | Baseball dunks basket         | sports  | baseball-team   |
+      | Basketball team hits home run | sports  | basketball-team |
+      | Football team sinks 30' putt  | sports  | football-team   |
+    When I query "NonStandardField" with the full slug "sports/football-team"
+    Then I should have the following model:
+      | model            | title                        |
+      | NonStandardField | Football team sinks 30' putt |

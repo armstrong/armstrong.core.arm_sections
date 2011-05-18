@@ -209,3 +209,14 @@ def then_i_should_have_caught_a_group1_exception(step, exception_name):
     exception = getattr(world.model_class, exception_name)
     assert isinstance(world.exception, exception), "%s is not a %s" % (
             world.exception.__class__.__name__, exception.__class__.__name__)
+
+
+@step(u'And I have the following NonStandardField models:')
+def and_i_have_the_following_nonstandardfield_models(step):
+    from armstrong.core.arm_sections.tests.arm_sections_support import models
+    for row in step.hashes:
+        section = Section.objects.get(slug=row["section"])
+        models.NonStandardField.objects.create(title=row["title"],
+            sections_by_another_name=section,
+            slugs_by_another_name=row["slug"]
+        )
