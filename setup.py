@@ -37,10 +37,10 @@ def build_package(dirpath, dirnames, filenames):
 
 setup(
     name='armstrong.core.arm_sections',
-    version='0.0.1a',
+    version='0.1',
     description='Provides the basic section objects',
     author='Bay Citizen & Texas Tribune',
-    author_email='info@armstrongcms.org',
+    author_email='dev@armstrongcms.org',
     url='http://github.com/armstrongcms/armstrong.core.arm_sections/',
     packages=packages,
     package_data={"armstrong": data_files},
