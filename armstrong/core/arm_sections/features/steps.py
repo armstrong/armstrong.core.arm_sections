@@ -137,6 +137,8 @@ def and_i_have_the_following_models_from_support_app(step):
         rel = [a[0] for a in cls._meta.get_fields_with_model() \
                 if a[0].__class__.__name__ == 'ForeignKey'][0]
         kwargs = {"title": row["title"], rel.name: section, }
+        if "slug" in row:
+            kwargs["slug"] = row["slug"]
         try:
             world.created.append(cls.objects.create(**kwargs))
         except Exception, e:
@@ -154,7 +156,8 @@ def then_i_should_have_the_following_model(step):
     counter = 0
     for item in world.items:
         row = step.hashes[counter]
-        assert row["model"] == item.__class__.__name__
+        assert row["model"] == item.__class__.__name__, "%s != %s" % (
+                row["model"], item.__class__.__name__)
         assert row["title"] == item.title
         counter += 1
 
@@ -188,3 +191,10 @@ def configure_fake_backend(step):
 def then_the_fake_backend_should_have_been_called(step):
     assert fake_backend.call_count is 1
     assert fake_backend.args[0] == world.section
+
+
+@step(u'I query "(.*)" with the full slug "(.*)"')
+def query_by_full_slug(step, model_name, slug):
+    from armstrong.core.arm_sections.tests.arm_sections_support import models
+    model = getattr(models, model_name)
+    world.items = [model.with_section.get_by_slug(slug)]
