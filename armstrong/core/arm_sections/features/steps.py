@@ -151,7 +151,7 @@ def and_i_load_the_section_s_items(step):
 
 @step(u'Then I should have the following model:')
 def then_i_should_have_the_following_model(step):
-    assert world.exception is None, "sanity check"
+    assert world.exception is None, "sanity check: %s" % type(world.exception)
     assert len(world.items) == len(step.hashes)
     counter = 0
     for item in world.items:
