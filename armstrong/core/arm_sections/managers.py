@@ -9,4 +9,7 @@ class SectionSlugManager(models.Manager):
                 slug=content_slug)
         if hasattr(qs, "select_subclasses"):
             qs = qs.select_subclasses()
-        return qs[0]
+        try:
+            return qs[0]
+        except IndexError:
+            raise self.model.DoesNotExist

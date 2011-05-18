@@ -11,6 +11,8 @@ from armstrong.core.arm_sections.models import Section
 @before.each_scenario
 def teardown_scenario(scenario):
     Section.objects.all().delete()
+    world.exception = None
+    world.model_class = None
     world.created = []
     world.sections = []
     world.original_settings = copy(settings)
@@ -149,6 +151,7 @@ def and_i_load_the_section_s_items(step):
 
 @step(u'Then I should have the following model:')
 def then_i_should_have_the_following_model(step):
+    assert world.exception is None, "sanity check"
     assert len(world.items) == len(step.hashes)
     counter = 0
     for item in world.items:
@@ -193,5 +196,16 @@ def then_the_fake_backend_should_have_been_called(step):
 @step(u'I query "(.*)" with the full slug "(.*)"')
 def query_by_full_slug(step, model_name, slug):
     from armstrong.core.arm_sections.tests.arm_sections_support import models
-    model = getattr(models, model_name)
-    world.items = [model.with_section.get_by_slug(slug)]
+    world.model_class = getattr(models, model_name)
+    try:
+        world.items = [world.model_class.with_section.get_by_slug(slug)]
+    except Exception, e:
+        world.exception = e
+
+
+@step(u'I should have caught a "(.*)" exception')
+def then_i_should_have_caught_a_group1_exception(step, exception_name):
+    assert world.exception is not None, "sanity check"
+    exception = getattr(world.model_class, exception_name)
+    assert isinstance(world.exception, exception), "%s is not a %s" % (
+            world.exception.__class__.__name__, exception.__class__.__name__)
