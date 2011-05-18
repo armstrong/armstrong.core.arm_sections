@@ -11,6 +11,8 @@ class SectionSlugManager(models.Manager):
     def get_by_slug(self, slug):
         if slug[-1] == "/":
             slug = slug[0:-1]
+        if slug[0] == "/":
+            slug = slug[1:]
         section_slug, content_slug = slug.rsplit("/", 1)
         section_slug += "/"
         kwargs = {
