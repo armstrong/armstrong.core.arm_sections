@@ -23,7 +23,11 @@ class Photo(Common):
 
 class SimpleCommon(models.Model):
     title = models.CharField(max_length=20)
-    section = models.ForeignKey(Section)
+    primary_section = models.ForeignKey(Section)
+    slug = models.SlugField()
+
+    objects = models.Manager()
+    with_section = SectionSlugManager()
 
 
 class SimpleArticle(SimpleCommon):
