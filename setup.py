@@ -33,11 +33,11 @@ def build_package(dirpath, dirnames, filenames):
 
 
 [build_package(dirpath, dirnames, filenames) for dirpath, dirnames, filenames
-        in os.walk('armstrong')]
+        in os.walk('armstrong/core/arm_sections')]
 
 setup(
     name='armstrong.core.arm_sections',
-    version='0.1.1',
+    version='0.1.2',
     description='Provides the basic section objects',
     author='Bay Citizen & Texas Tribune',
     author_email='dev@armstrongcms.org',
