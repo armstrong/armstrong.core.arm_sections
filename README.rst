@@ -17,6 +17,26 @@ managed through a `django-mptt`_ using a technique called *modified preordered
 tree traversal*.
 
 
+Installation & Configuration
+----------------------------
+
+::
+
+    NAME=armstrong.core.arm_sections
+    pip install -e git://github.com/armstrongcms/$NAME.git#egg=$NAME
+
+There are two settings that should be set for sections to work.  Unless you're
+using a custom content model, you should be able to use these settings without
+tweaking::
+
+    ARMSTRONG_SECTION_ITEM_BACKEND="armstrong.core.arm_sections.backend.find_related_models"
+    ARMSTRONG_SECTION_ITEM_MODEL="armstrong.apps.content.models.Content"
+
+.. note:: As of version 0.1.x that shipped with Armstrong 11.06, these settings
+          are required.  Future versions of armstrong.core.arm_sections will
+          have these both set by default.
+
+
 Usage
 -----
 
@@ -64,25 +84,6 @@ more information.
 .. _django-model-utils: https://github.com/carljm/django-model-utils
 
 *Note*: Additional backends are planned.
-
-Installation & Configuration
-----------------------------
-
-::
-
-    NAME=armstrong.core.arm_sections
-    pip install -e git://github.com/armstrongcms/$NAME.git#egg=$NAME
-
-There are two settings that should be set for sections to work.  Unless you're
-using a custom content model, you should be able to use these settings without
-tweaking::
-
-    ARMSTRONG_SECTION_ITEM_BACKEND="armstrong.core.arm_sections.backend.find_related_models"
-    ARMSTRONG_SECTION_ITEM_MODEL="armstrong.apps.content.models.Content"
-
-.. note:: As of version 0.1.x that shipped with Armstrong 11.06, these settings
-          are required.  Future versions of armstrong.core.arm_sections will
-          have these both set by default.
 
 
 Contributing
