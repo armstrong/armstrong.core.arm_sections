@@ -57,35 +57,6 @@ in a given section.  For example::
 You can also relate to multiple sections as well through a ``ManyToManyField``.
 
 
-Getting Items in a Section
-""""""""""""""""""""""""""
-
-Sections provide a property called ``items`` which allow you to access all of
-the items associated with them.  ``items`` is powered by backends so it can
-look at the most efficient place to figure out how to get what is associated
-with it.
-
-The easiest to set up is the standard database-powered ``QuerySet``.  The
-default one is configurable by the following settings::
-
-    # Change to a custom items backend
-    ARMSTRONG_SECTION_ITEM_BACKEND = "mybackend.my_callable"
-
-The default is ``armstrong.core.arm_sections.backends.find_related_models``
-which assumes that the model hierarchy follows the the one defined in Armstrong
-of one ``Content`` model that all elements extend from.
-
-We optimize the one-to-one query in a way that results in a single query when
-we can.  By using ``select_subclasses`` that is present in the default content
-models in Armstrong, we can automatically return the more specific version of a
-model without having to do multiple queries.  See `django-model-utils`_ for
-more information.
-
-.. _django-model-utils: https://github.com/carljm/django-model-utils
-
-*Note*: Additional backends are planned.
-
-
 Contributing
 ------------
 
