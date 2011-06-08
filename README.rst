@@ -45,43 +45,44 @@ the items associated with them.  ``items`` is powered by backends so it can
 look at the most efficient place to figure out how to get what is associated
 with it.
 
-The easiest to set up is the standard database-powered QuerySet.  The default
-one is configurable by the following settings::
+The easiest to set up is the standard database-powered ``QuerySet``.  The
+default one is configurable by the following settings::
 
-    # Default model to use 
-    ARMSTRONG_SECTIONS_QUERYSET_BACKEND = "mysite.models.MyContent"
+    # Change to a custom items backend
+    ARMSTRONG_SECTION_ITEM_BACKEND = "mybackend.my_callable"
 
-You can also set a per-slug QuerySet to swap out what QuerySet you use for each
-type of Section.
+The default is ``armstrong.core.arm_sections.backends.find_related_models``
+which assumes that the model hierarchy follows the the one defined in Armstrong
+of one ``Content`` model that all elements extend from.
 
-::
+We optimize the one-to-one query in a way that results in a single query when
+we can.  By using ``select_subclasses`` that is present in the default content
+models in Armstrong, we can automatically return the more specific version of a
+model without having to do multiple queries.  See `django-model-utils`_ for
+more information.
 
-    # 
-    ARMSTRONG_SECTIONS_QUERYSET_BACKEND = {
-        "immigration": "other.models.SomeOtherModel",
-        "immigration/dream-act": "other.models.YetAnotherModel",
-        "immigration/sanctuary-cities": "other.utils.some_callable",
-    }
-
-The keys are the full slug of a given ``Section``.  Slugs are determined by
-joining the slug with all of the slugs of its parents.  For example,
-``sanctuary-cities`` is the slug for the ``Section`` that is a child of the
-``Section`` with a slug of ``immigration``.
-
-If the provided us callable, it will be executed and passed ``Section`` object
-that is trying to find its ``items``.  If it's not executable, it will attempt
-to an ``objects`` property on the class (normally a model) and attempt to call
-``by_section(<section.slug>)`` to determine which models are available for the
-given section.
+.. _django-model-utils: https://github.com/carljm/django-model-utils
 
 *Note*: Additional backends are planned.
 
-Installation
-------------
+Installation & Configuration
+----------------------------
 
 ::
 
-    pip install -e git://github.com/armstrongcms/armstrong.core.arm_sections
+    NAME=armstrong.core.arm_sections
+    pip install -e git://github.com/armstrongcms/$NAME.git#egg=$NAME
+
+There are two settings that should be set for sections to work.  Unless you're
+using a custom content model, you should be able to use these settings without
+tweaking::
+
+    ARMSTRONG_SECTION_ITEM_BACKEND="armstrong.core.arm_sections.backend.find_related_models"
+    ARMSTRONG_SECTION_ITEM_MODEL="armstrong.apps.content.models.Content"
+
+.. note:: As of version 0.1.x that shipped with Armstrong 11.06, these settings
+          are required.  Future versions of armstrong.core.arm_sections will
+          have these both set by default.
 
 
 Contributing
@@ -100,7 +101,7 @@ State of Project
 Armstrong is an open-source news platform that is freely available to any
 organization.  It is the result of a collaboration between the `Texas Tribune`_
 and `Bay Citizen`_, and a grant from the `John S. and James L. Knight
-Foundation`_.  The first release is scheduled for June, 2011.
+Foundation`_.  The first stable release is scheduled for September, 2011.
 
 To follow development, be sure to join the `Google Group`_.
 
