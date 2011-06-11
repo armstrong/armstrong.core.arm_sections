@@ -37,7 +37,7 @@ def build_package(dirpath, dirnames, filenames):
 
 setup(
     name='armstrong.core.arm_sections',
-    version='0.1.2.0.alpha.0',
+    version='0.1.2.1',
     description='Provides the basic section objects',
     author='Bay Citizen & Texas Tribune',
     author_email='dev@armstrongcms.org',
