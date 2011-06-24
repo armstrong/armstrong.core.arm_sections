@@ -23,3 +23,4 @@ settings = {
 full_name = "armstrong.core.arm_sections"
 main_app = "arm_sections"
 tested_apps = (main_app, )
+pip_install_first = True
