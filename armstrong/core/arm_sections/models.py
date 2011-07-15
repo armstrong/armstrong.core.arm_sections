@@ -5,7 +5,7 @@ from mptt.fields import TreeForeignKey
 from armstrong.utils.backends import GenericBackend
 
 SECTION_ITEM_BACKEND = GenericBackend('ARMSTRONG_SECTION_ITEM_BACKEND',
-        defaults="armstrong.core.arm_sections.backends.find_related_models")
+        defaults="armstrong.core.arm_sections.backends.find_related_models").get_backend
 
 
 class SectionManager(models.Manager):
@@ -30,7 +30,7 @@ class Section(MPTTModel):
 
     @property
     def items(self):
-        return SECTION_ITEM_BACKEND.get_backend(self)
+        return SECTION_ITEM_BACKEND(self)
 
     def save(self, *args, **kwargs):
         orig_full_slug = self.full_slug
