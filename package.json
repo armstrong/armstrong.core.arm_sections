@@ -1,5 +1,8 @@
 {
     "name": "armstrong.core.arm_sections",
     "version": "0.2.0.alpha.0",
-    "description": "Provides the basic section objects"
+    "description": "Provides the basic section objects",
+    "install_requires": [
+        "armstrong.utils.backends"
+    ]
 }
