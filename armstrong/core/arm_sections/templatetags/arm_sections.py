@@ -8,22 +8,28 @@ register = djtemplate.Library()
 
 class SectionMenuNode(djtemplate.Node):
     def __init__(self, 
-            template='arm_sections/sections_menu.html',
+            template=None,
             section_view=None,
             sections=None):
-        # this should go away, it's only here temporarily
-        # to make testing easier
-        if sections is None:
-            sections = Section.objects.all().order_by('tree_id')
-        self.sections = sections
         self.template = template
         self.section_view = section_view
+        self.sections = sections
 
     def render(self, context):
-        return render_to_string(self.template,
-                djtemplate.Context({'sections':self.sections,
-                                    'section_view':self.section_view,
-                                    }))
+        if self.template is None:
+            template = 'arm_sections/sections_menu.html'
+        else:
+            template = self.template.resolve(context)
+
+        if self.sections is None:
+            sections = Section.objects.all().order_by('tree_id')
+        else:
+            sections = self.sections.resolve(context)
+
+        dictionary={'sections':sections,
+                    'section_view':self.section_view,
+                    }
+        return render_to_string(template, dictionary=dictionary)
 
 @register.tag(name='section_menu')
 def do_section_menu(parser, token):
