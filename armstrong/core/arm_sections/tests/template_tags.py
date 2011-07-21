@@ -2,7 +2,7 @@ from ._utils import *
 from ..models import Section
 from ..templatetags import arm_sections
 from django.core import urlresolvers
-from django.template import Template, Context
+from django.template import Template, Context, TemplateSyntaxError
 
 class SectionMenuTestCase(ArmSectionsTestCase):
     def setUp(self):
@@ -91,3 +91,7 @@ class SectionMenuTestCase(ArmSectionsTestCase):
         result = template.render(Context({}))
         self.assertEquals(result, u'This is the test template\n')
 
+    def test_section_menu_parser_invalid(self):
+        with self.assertRaises(TemplateSyntaxError):
+            template = Template('{% load arm_sections %}' + \
+                    '{% section_menu "test_sections.html" %}')
