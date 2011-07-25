@@ -67,7 +67,7 @@ provided in the demo project which has the following in ``urls.py``::
 A template tag to render menus is provided called ``section_menu``. It can be
 customized by passing in a template, but standard usage looks like::
 
-    {% load arm_sections %}
+    {% load section_helpers %}
     {% section_menu section_view='section_view' %}
 
 The ``section_view`` parameter tells ``section_menu`` what view to link to for
