@@ -4,6 +4,7 @@ from django.utils.translation import ugettext as _
 
 from .models import Section
 
+
 class SimpleSectionView(TemplateView):
     well_title = None
 
@@ -14,4 +15,3 @@ class SimpleSectionView(TemplateView):
         context = super(SimpleSectionView, self).get_context_data(**kwargs)
         context["section"] = self.get_section()
         return context
-

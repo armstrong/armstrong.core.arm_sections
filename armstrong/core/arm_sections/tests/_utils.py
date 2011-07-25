@@ -8,7 +8,6 @@ from armstrong.dev.tests.utils.users import *
 
 import fudge
 
+
 class ArmSectionsTestCase(ArmstrongTestCase):
     pass
-
-

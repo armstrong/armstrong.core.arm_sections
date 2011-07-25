@@ -6,8 +6,9 @@ from django.template.defaulttags import token_kwargs
 
 register = djtemplate.Library()
 
+
 class SectionMenuNode(djtemplate.Node):
-    def __init__(self, 
+    def __init__(self,
             template=None,
             section_view=None,
             sections=None):
@@ -26,10 +27,11 @@ class SectionMenuNode(djtemplate.Node):
         else:
             sections = self.sections.resolve(context)
 
-        dictionary={'sections':sections,
-                    'section_view':self.section_view,
-                    }
+        dictionary = {'sections': sections,
+                      'section_view': self.section_view,
+                     }
         return render_to_string(template, dictionary=dictionary)
+
 
 @register.tag(name='section_menu')
 def do_section_menu(parser, token):
@@ -40,7 +42,7 @@ def do_section_menu(parser, token):
         if len(args) > 0:
             raise ValueError
     except ValueError:
-        raise djtemplate.TemplateSyntaxError("%r tag accepts only keyword arguments" \
-                        % token.contents.split()[0])
+        raise djtemplate.TemplateSyntaxError(
+                "%r tag accepts only keyword arguments" \
+                % token.contents.split()[0])
     return SectionMenuNode(**kwargs)
-

@@ -6,7 +6,7 @@ from mptt.models import MPTTModel
 
 from .models import Section
 
-EMPTY_LABEL = u="---------"
+EMPTY_LABEL = u"---------"
 
 
 class SectionTreeAdminMixin(object):
@@ -20,16 +20,16 @@ class SectionTreeAdminMixin(object):
             required = db_field.formfield().required
             return TreeNodeChoiceField(queryset=db_field.rel.to.objects.all(),
                     required=required, empty_label=EMPTY_LABEL)
-        return super(SectionTreeAdminMixin, self).formfield_for_foreignkey(db_field,
-                request, **kwargs)
+        return super(SectionTreeAdminMixin, self)\
+                .formfield_for_foreignkey(db_field, request, **kwargs)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if issubclass(db_field.rel.to, MPTTModel):
             required = db_field.formfield().required
             return TreeNodeMultipleChoiceField(empty_label=EMPTY_LABEL,
                     queryset=db_field.rel.to.objects.all(), required=required)
-        return super(SectionTreeAdminMixin, self).formfield_for_manytomany(db_field,
-                request, **kwargs)
+        return super(SectionTreeAdminMixin, self)\
+                .formfield_for_manytomany(db_field, request, **kwargs)
 
 
 class SectionAdmin(MPTTModelAdmin):

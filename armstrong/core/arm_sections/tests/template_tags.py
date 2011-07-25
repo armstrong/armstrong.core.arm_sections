@@ -29,7 +29,7 @@ class SectionMenuTestCase(ArmSectionsTestCase):
                     title=title,
                     slug=slug,
                     summary=summary,
-                    parent = parent,
+                    parent=parent,
                 ))
 
     def test_render_without_parameters(self):
@@ -49,7 +49,7 @@ class SectionMenuTestCase(ArmSectionsTestCase):
         with fudge.patched_context(urlresolvers, "reverse", reverse):
             result = node.render(None)
             for section in self.sections:
-                section_link = "<a href='%s'>%s</a>" % (link, section.title) 
+                section_link = "<a href='%s'>%s</a>" % (link, section.title)
                 self.assertTrue(section_link in result)
 
     def test_render_with_custom_template(self):
@@ -75,7 +75,8 @@ class SectionMenuTestCase(ArmSectionsTestCase):
                 {% section_menu %}""")
         section_node = template.nodelist[2]
         all_sections = Section.objects.all().order_by('tree_id')
-        self.assertEquals(section_node.__class__, section_helpers.SectionMenuNode)
+        self.assertEquals(section_node.__class__,
+                section_helpers.SectionMenuNode)
         self.assertEquals(section_node.sections, None)
         self.assertEquals(section_node.section_view, None)
         self.assertEquals(section_node.template, None)
