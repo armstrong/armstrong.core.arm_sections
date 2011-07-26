@@ -1,0 +1,18 @@
+{% load mptt_tags %}
+<ul class="root">
+    {% recursetree sections %}
+        <li>
+            {% if section_view %}
+                <a href='{% url section_view full_slug=node.full_slug %}'>{{ node.title }}</a>
+            {% else %}
+                {{ node.title }}
+            {% endif %}
+            {% if not node.is_leaf_node %}
+                <ul class="children">
+                    {{ children }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endrecursetree %}
+</ul>
+

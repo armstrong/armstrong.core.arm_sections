@@ -38,7 +38,7 @@ def given_i_have_the_following_sections(step):
         if parent:
             data["parent"] = Section.objects.get(slug=parent)
         world.sections.append(Section.objects.create(**data))
-        
+
 
 @step(u'I query for a section by slug "(.*)"')
 def retrieve_by_slug(step, slug):
@@ -99,7 +99,8 @@ def then_i_should_have_the_following_sections(step):
                 else:
                     assert getattr(related, key) == value
             else:
-                assert getattr(child, key) == value, "(%s) child.%s == %s" % (child.title, key, value)
+                assert getattr(child, key) == value, "(%s) child.%s == %s" % \
+                        (child.title, key, value)
         counter += 1
 
 
@@ -126,7 +127,9 @@ def load_all_sessions(step):
 
 @step(u'Given I have a "(.*)" model registered with the backends')
 def setup_common_model(step, model):
-    settings.ARMSTRONG_SECTION_ITEM_MODEL = "armstrong.core.arm_sections.tests.arm_sections_support.models.%s" % model
+    settings.ARMSTRONG_SECTION_ITEM_MODEL = \
+        "armstrong.core.arm_sections.tests.arm_sections_support.models.%s" \
+        % model
 
 
 @step(u'I have the following models from support app:')

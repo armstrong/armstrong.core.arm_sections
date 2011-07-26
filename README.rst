@@ -56,6 +56,43 @@ in a given section.  For example::
 
 You can also relate to multiple sections as well through a ``ManyToManyField``.
 
+To display a section view, we provide the ``SimpleSectionView``. An example is
+provided in the demo project which has the following in ``urls.py``::
+
+    url(r'^section/(?P<full_slug>[-\w/]+)',
+            SimpleSectionView.as_view(template_name='section.html'),
+            name='section_view'),
+    # renders the view identified by full_slug using section.html
+
+A template tag to render menus is provided called ``section_menu``. It can be
+customized by passing in a template, but standard usage looks like::
+
+    {% load section_helpers %}
+    {% section_menu section_view='section_view' %}
+
+The ``section_view`` parameter tells ``section_menu`` what view to link to for
+a given section. If your urls.py is configured as in the above example, the
+menu will render as::
+
+    <ul class="root">
+        <li>
+            <a href='/section/politics/'>Politics</a>
+        </li>
+        <li>
+            <a href='/section/sports/'>Sports</a>
+            <ul class="children">
+                <li>
+                    <a href='/section/sports/football/'>Football</a>
+                </li>
+                <li>
+                    <a href='/section/sports/basketball/'>Basketball</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href='/section/fashion/'>Fashion</a>
+        </li>
+    </ul>
 
 Contributing
 ------------

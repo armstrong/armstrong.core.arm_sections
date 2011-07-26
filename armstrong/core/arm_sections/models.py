@@ -2,6 +2,11 @@ from django.conf import settings
 from django.db import models
 from mptt.models import MPTTModel
 from mptt.fields import TreeForeignKey
+from armstrong.utils.backends import GenericBackend
+
+SECTION_ITEM_BACKEND = GenericBackend('ARMSTRONG_SECTION_ITEM_BACKEND',
+        defaults="armstrong.core.arm_sections.backends.find_related_models")\
+                .get_backend
 
 
 class SectionManager(models.Manager):
@@ -26,11 +31,7 @@ class Section(MPTTModel):
 
     @property
     def items(self):
-        backend = getattr(settings, "ARMSTRONG_SECTION_ITEM_BACKEND",
-                "armstrong.core.arm_sections.backends.find_related_models")
-        module, func = backend.rsplit('.', 1)
-        m = __import__(module, globals(), locals(), module)
-        return getattr(m, func)(self)
+        return SECTION_ITEM_BACKEND(self)
 
     def save(self, *args, **kwargs):
         orig_full_slug = self.full_slug
