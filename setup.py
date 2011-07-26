@@ -103,4 +103,5 @@ setup(**setup_kwargs)
 import sys
 if "install" in sys.argv:
     import pip
-    pip.main(["install", "-r", "requirements/base.txt", ])
+    pip.main(["install", "-r", "requirements/base.txt", "-b",
+              "build-%s" % info["name"]])
