@@ -3,7 +3,6 @@ from copy import copy
 from django.conf import settings
 from django.db import connections
 from django.db import DEFAULT_DB_ALIAS
-import fudge
 from lettuce import *
 from armstrong.core.arm_sections.models import Section
 
