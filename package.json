@@ -4,10 +4,6 @@
     "description": "Provides the basic section objects",
     "install_requires": [
         "django==1.3.0",
-        "armstrong.utils.backends",
-        "idios==0.2a1.dev3"
-    ],
-    "dependency_links": [
-        "http://dist.pinaxproject.com/dev/idios/"
+        "armstrong.utils.backends"
     ]
 }
