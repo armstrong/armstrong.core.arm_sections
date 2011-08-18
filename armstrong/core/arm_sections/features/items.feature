@@ -9,8 +9,8 @@ Feature: Retrieving Items for Section
       | Local   | local     | All about local   |
       | Sports  | sports    | All about sports  |
       | Weather | weather   | All about weather |
-    And I have the following models from support app:
-      | model   | title                         | section |
+    And I have the following many-to-many models from support app:
+      | model   | title                         | sections|
       | Article | Baseball dunks basket         | sports  |
       | Article | Basketball team hits home run | sports  |
       | Photo   | Football team sinks 30' putt  | sports  |

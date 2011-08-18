@@ -6,11 +6,11 @@ from model_utils.managers import InheritanceManager
 
 class Common(models.Model):
     title = models.CharField(max_length=20)
-    primary_section = models.ForeignKey(Section)
+    sections = models.ManyToManyField(Section)
     slug = models.SlugField()
 
     objects = InheritanceManager()
-    with_section = SectionSlugManager()
+    with_section = SectionSlugManager(section_field="sections")
 
 
 class Article(Common):

@@ -10,8 +10,8 @@ Feature: Getting models with full slug
       | Local   | local     | All about local   |
       | Sports  | sports    | All about sports  |
       | Weather | weather   | All about weather |
-    And I have the following models from support app:
-      | model   | title                         | section | slug            |
+    And I have the following many-to-many models from support app:
+      | model   | title                         | sections| slug            |
       | Article | Baseball dunks basket         | sports  | baseball-team   |
       | Article | Basketball team hits home run | sports  | basketball-team |
       | Photo   | Football team sinks 30' putt  | sports  | football-team   |
@@ -27,8 +27,8 @@ Feature: Getting models with full slug
       | Local   | local     | All about local   |
       | Sports  | sports    | All about sports  |
       | Weather | weather   | All about weather |
-    And I have the following models from support app:
-      | model   | title                         | section | slug            |
+    And I have the following many-to-many models from support app:
+      | model   | title                         | sections| slug            |
       | Article | Baseball dunks basket         | sports  | baseball-team   |
       | Article | Basketball team hits home run | sports  | basketball-team |
       | Photo   | Football team sinks 30' putt  | sports  | football-team   |
@@ -44,8 +44,8 @@ Feature: Getting models with full slug
       | Local   | local     | All about local   |
       | Sports  | sports    | All about sports  |
       | Weather | weather   | All about weather |
-    And I have the following models from support app:
-      | model   | title                         | section | slug            |
+    And I have the following many-to-many models from support app:
+      | model   | title                         | sections| slug            |
       | Article | Baseball dunks basket         | sports  | baseball-team   |
       | Article | Basketball team hits home run | sports  | basketball-team |
       | Photo   | Football team sinks 30' putt  | sports  | football-team   |
@@ -78,8 +78,8 @@ Feature: Getting models with full slug
       | Local   | local     | All about local   |
       | Sports  | sports    | All about sports  |
       | Weather | weather   | All about weather |
-    And I have the following models from support app:
-      | model   | title                         | section | slug            |
+    And I have the following many-to-many models from support app:
+      | model   | title                         | sections| slug            |
       | Article | Baseball dunks basket         | sports  | baseball-team   |
       | Article | Basketball team hits home run | sports  | basketball-team |
       | Photo   | Football team sinks 30' putt  | sports  | football-team   |
