@@ -146,6 +146,21 @@ def and_i_have_the_following_models_from_support_app(step):
         world.created.append(cls.objects.create(**kwargs))
 
 
+@step(u'I have the following many-to-many models from support app:')
+def and_i_have_the_following_many_to_many_models_from_support_app(step):
+    from armstrong.core.arm_sections.tests.arm_sections_support import models
+    for row in step.hashes:
+        slugs = row["sections"].split(',')
+        sections = Section.objects.filter(slug__in=slugs)
+        cls = getattr(models, row['model'])
+        kwargs = {"title": row["title"]}
+        if "slug" in row:
+            kwargs["slug"] = row["slug"]
+        obj = cls.objects.create(**kwargs)
+        obj.sections.add(*sections)
+        world.created.append(obj)
+
+
 @step(u"I load the section's items")
 def and_i_load_the_section_s_items(step):
     world.items = world.section.items

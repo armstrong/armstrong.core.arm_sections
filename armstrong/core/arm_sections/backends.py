@@ -3,7 +3,8 @@ from django.conf import settings
 
 def find_related_models(section):
     rel = None
-    relateds = section._meta.get_all_related_objects()
+    relateds = section._meta.get_all_related_objects() + \
+               section._meta.get_all_related_many_to_many_objects()
     for related in relateds:
         found = "%s.%s" % (related.model.__module__,
                 related.model.__name__)
