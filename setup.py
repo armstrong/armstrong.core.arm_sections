@@ -85,7 +85,7 @@ setup_kwargs = {
     "packages": packages,
     "package_data": {info["name"]: data_files, },
     "namespace_packages": NAMESPACE_PACKAGES,
-    "setup_requires": ["pip", "distribute", ],
+    "setup_requires": ["pip", ],
     "classifiers": [
         'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
