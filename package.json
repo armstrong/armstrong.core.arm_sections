@@ -3,7 +3,7 @@
     "version": "1.1.0.alpha.0",
     "description": "Provides the basic section objects",
     "install_requires": [
-        "django==1.3.1",
+        "Django==1.3.1",
         "armstrong.utils.backends>=1.0.0,<1.1"
     ]
 }
