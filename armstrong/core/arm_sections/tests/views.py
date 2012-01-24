@@ -36,3 +36,10 @@ class SectionsViewTestCase(ArmSectionsTestCase):
                 kwargs={'full_slug': self.us_pro_sports.full_slug})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
+
+    def test_feed_view_for_missing_section_raises_404(self):
+        url = urlresolvers.reverse(
+                'section_feed',
+                kwargs={'full_slug': 'not-a-section/nope/'})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
