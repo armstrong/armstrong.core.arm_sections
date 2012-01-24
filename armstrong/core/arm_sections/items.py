@@ -1,20 +1,25 @@
 from django.conf import settings
+from django.db.models import Q
 
 
 class ItemFilter(object):
-    def get_section_relation(self, section):
-        rel = None
-        relateds = section._meta.get_all_related_objects() + \
+    def get_section_relations(self, section):
+        all_rels = section._meta.get_all_related_objects() + \
                    section._meta.get_all_related_many_to_many_objects()
-        for related in relateds:
+        model_rels = []
+        for related in all_rels:
             found = "%s.%s" % (related.model.__module__,
                     related.model.__name__)
             if found == settings.ARMSTRONG_SECTION_ITEM_MODEL:
-                return related
+                model_rels.append(related)
+        return model_rels
 
-    def filter_objects_by_section(self, rel, section):
-        kwargs = {rel.field.name: section}
-        return rel.model.objects.filter(**kwargs)
+    def filter_objects_by_section(self, rels, section):
+        kwargs_list = [{rel.field.name: section} for rel in rels]
+        q = Q(**kwargs_list[0])
+        for kwargs in kwargs_list[1:]:
+            q |= Q(**kwargs)
+        return rels[0].model.objects.filter(q)
 
     def process_items(self, items):
         if hasattr(items, 'select_subclasses'):
@@ -22,6 +27,6 @@ class ItemFilter(object):
         return items
 
     def run(self, section):
-        relation = self.get_section_relation(section)
-        items = self.filter_objects_by_section(relation, section)
+        relations = self.get_section_relations(section)
+        items = self.filter_objects_by_section(relations, section)
         return self.process_items(items)
