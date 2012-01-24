@@ -14,9 +14,12 @@ out how what models it should return.
 -----------------------
 
 ``find_related_models`` is the default backend for handling requests to a
-``Section``'s ``items`` property.  It queries the configured model looking for
-related data.  It uses the model specified in ``ARMSTRONG_SECTION_ITEM_MODEL``
-to search for data.
+``Section``'s ``items`` property.  It queries the model configured in the
+``ARMSTRONG_SECTION_ITEM_MODEL setting for related data.
+
+This setting should contain the full path to the model.  For example::
+
+    ARMSTRONG_SECTION_ITEM_MODEL = 'armstrong.apps.content.models.Content'
 
 For this to work across multiple models this assumes you are using a
 non-abstract model as the a base ``Content`` model with specific types
