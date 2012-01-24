@@ -23,6 +23,13 @@ class SectionsViewTestCase(ArmSectionsTestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
 
+    def test_view_has_section_in_context(self):
+        url = urlresolvers.reverse(
+                'section_detail',
+                kwargs={'full_slug': self.sports.full_slug})
+        response = self.client.get(url)
+        self.assertEqual(response.context['section'], self.sports)
+
     def test_view_for_missing_section_raises_404(self):
         url = urlresolvers.reverse(
                 'section_detail',
