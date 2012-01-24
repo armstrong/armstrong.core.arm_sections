@@ -9,10 +9,18 @@ class SectionsViewTestCase(ArmSectionsTestCase):
     def setUp(self):
         super(SectionsViewTestCase, self).setUp()
         self.sports = Section.objects.get(slug='sports')
+        self.us_pro_sports = Section.objects.get(full_slug='sports/pro/us')
 
-    def test_view_responds_to_full_slug_url(self):
+    def test_view_responds_to_full_slug(self):
         url = urlresolvers.reverse(
-                'section_detail', kwargs={'full_slug': self.sports.full_slug})
+                'section_detail',
+                kwargs={'full_slug': self.sports.full_slug})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+
+        url = urlresolvers.reverse(
+                'section_detail',
+                kwargs={'full_slug': self.us_pro_sports.full_slug})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
 

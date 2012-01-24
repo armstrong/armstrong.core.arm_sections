@@ -20,6 +20,7 @@ class ArmSectionsTestCase(ArmstrongTestCase):
                 ('Sports', 'sports', 'All about sports', None),
                 ('College', 'college', 'All about college sports', 1),
                 ('Pro', 'pro', 'All about pro sports', 1),
+                ('US', 'us', 'All about US sports', 3),
                 ('Weather', 'weather', 'All about weather', None),
                 ]
         for title, slug, summary, parent in data:
