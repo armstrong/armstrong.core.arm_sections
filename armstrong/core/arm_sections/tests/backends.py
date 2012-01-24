@@ -4,6 +4,10 @@ from ._utils import *
 from ..models import Section
 from arm_sections_support.models import *
 
+from armstrong.core.arm_sections.backends import ItemFilter
+from armstrong.core.arm_sections.managers import SectionSlugManager
+from model_utils.managers import InheritanceManager
+
 
 class ManyToManyBackendTestCase(ArmSectionsTestCase):
     """
@@ -102,3 +106,20 @@ class HierarchyBackendTestCase(ArmSectionsTestCase):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
             self.assert_(self.complex_article in self.sports.items)
             self.assert_(self.complex_article in self.pro_sports.items)
+
+class ManagerTestCase(ArmSectionsTestCase):
+    """
+    Test fetching items for a parent section of the associated section.
+    """
+    def setUp(self):
+        super(ManagerTestCase, self).setUp()
+        self.item_filter = ItemFilter()
+
+    def test_default_manager(self):
+        self.assertEquals(self.item_filter.get_manager(ComplexCommon).__class__,
+            InheritanceManager)
+
+    def test_custom_manager(self):
+        self.item_filter.manager_attr = 'with_section'
+        self.assertEquals(self.item_filter.get_manager(ComplexCommon).__class__,
+            SectionSlugManager)
