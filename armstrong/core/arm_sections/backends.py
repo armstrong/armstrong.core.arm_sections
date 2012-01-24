@@ -3,7 +3,7 @@ from django.db.models import Q
 
 
 class ItemFilter(object):
-    managers = {}
+    manager_attr = '_default_manager'
 
     def get_section_relations(self, section):
         all_rels = section._meta.get_all_related_objects() + \
@@ -17,9 +17,7 @@ class ItemFilter(object):
         return model_rels
 
     def get_manager(self, model):
-        import_path = "%s.%s" % (model.__module__, model.__name__)
-        manager_attr = self.managers.get(import_path, '_default_manager')
-        return getattr(model, manager_attr)
+        return getattr(model, self.manager_attr)
 
     def filter_objects_by_section(self, rels, section):
         subtree = section.get_descendants(include_self=True)
