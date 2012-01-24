@@ -116,7 +116,7 @@ class ManagerTestCase(ArmSectionsTestCase):
         """
         Test ItemFilter.get_manager with the default manager.
         """
-        self.assertEquals(self.item_filter.get_manager(ComplexCommon).__class__,
+        self.assertIsA(self.item_filter.get_manager(ComplexCommon),
             InheritanceManager)
 
     def test_custom_manager(self):
@@ -124,5 +124,5 @@ class ManagerTestCase(ArmSectionsTestCase):
         Test ItemFilter.get_manager with a custom manager.
         """
         self.item_filter.manager_attr = 'with_section'
-        self.assertEquals(self.item_filter.get_manager(ComplexCommon).__class__,
+        self.assertIsA(self.item_filter.get_manager(ComplexCommon),
             SectionSlugManager)
