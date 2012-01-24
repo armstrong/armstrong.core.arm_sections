@@ -1,7 +1,5 @@
-from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.views.generic import DetailView
-from django.utils.translation import ugettext as _
 from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 
