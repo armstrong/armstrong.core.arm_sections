@@ -15,7 +15,8 @@ class ItemFilter(object):
         return model_rels
 
     def filter_objects_by_section(self, rels, section):
-        kwargs_list = [{rel.field.name: section} for rel in rels]
+        subtree = section.get_descendants(include_self=True)
+        kwargs_list = [{'%s__in' % rel.field.name: subtree} for rel in rels]
         q = Q(**kwargs_list[0])
         for kwargs in kwargs_list[1:]:
             q |= Q(**kwargs)
