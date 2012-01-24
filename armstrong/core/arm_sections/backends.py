@@ -3,6 +3,8 @@ from django.db.models import Q
 
 
 class ItemFilter(object):
+    managers = {}
+
     def get_section_relations(self, section):
         all_rels = section._meta.get_all_related_objects() + \
                    section._meta.get_all_related_many_to_many_objects()
@@ -14,13 +16,18 @@ class ItemFilter(object):
                 model_rels.append(related)
         return model_rels
 
+    def get_manager(self, model):
+        import_path = "%s.%s" % (model.__module__, model.__name__)
+        manager_attr = self.managers.get(import_path, '_default_manager')
+        return getattr(model, manager_attr)
+
     def filter_objects_by_section(self, rels, section):
         subtree = section.get_descendants(include_self=True)
         kwargs_list = [{'%s__in' % rel.field.name: subtree} for rel in rels]
         q = Q(**kwargs_list[0])
         for kwargs in kwargs_list[1:]:
             q |= Q(**kwargs)
-        return rels[0].model.objects.filter(q)
+        return self.get_manager(rels[0].model).filter(q)
 
     def process_items(self, items):
         if hasattr(items, 'select_subclasses'):
