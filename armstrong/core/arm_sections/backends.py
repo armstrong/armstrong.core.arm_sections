@@ -27,11 +27,10 @@ class ItemFilter(object):
             items = items.select_subclasses()
         return items
 
-    def run(self, section):
+    def __call__(self, section):
         relations = self.get_section_relations(section)
         items = self.filter_objects_by_section(relations, section)
         return self.process_items(items)
 
 
-def find_related_models(section):
-    return ItemFilter().run(section)
+find_related_models = ItemFilter()
