@@ -25,6 +25,7 @@ class SectionsViewTestCase(ArmSectionsTestCase):
 
     def test_view_for_missing_section_raises_404(self):
         url = urlresolvers.reverse(
-                'section_detail', kwargs={'full_slug': 'not-a-section/nope/'})
+                'section_detail',
+                kwargs={'full_slug': 'not-a-section/nope/'})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
