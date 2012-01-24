@@ -109,7 +109,7 @@ class HierarchyBackendTestCase(ArmSectionsTestCase):
 
 class ManagerTestCase(ArmSectionsTestCase):
     """
-    Test fetching items for a parent section of the associated section.
+    Test ItemFilter.get_manager.
     """
     def setUp(self):
         super(ManagerTestCase, self).setUp()
