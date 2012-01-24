@@ -10,9 +10,6 @@ from model_utils.managers import InheritanceManager
 
 
 class ManyToManyBackendTestCase(ArmSectionsTestCase):
-    """
-    Test fetching items for content with a many-to-many relationship to sections.
-    """
     def setUp(self):
         super(ManyToManyBackendTestCase, self).setUp()
 
@@ -30,15 +27,15 @@ class ManyToManyBackendTestCase(ArmSectionsTestCase):
         self.article2.sections = [self.sports]
 
     def test_backend_with_articles(self):
+        """
+        Test fetching items for content with a many-to-many relationship to sections.
+        """
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.Common'):
             self.assert_(self.article in self.sports.items)
             self.assert_(self.article2 in self.sports.items)
 
 
 class ForeignKeyBackendTestCase(ArmSectionsTestCase):
-    """
-    Test fetching items for content with a foreign key relationship to sections.
-    """
     def setUp(self):
         super(ForeignKeyBackendTestCase, self).setUp()
 
@@ -57,15 +54,15 @@ class ForeignKeyBackendTestCase(ArmSectionsTestCase):
             )
 
     def test_backend_with_foreign_key_articles(self):
+        """
+        Test fetching items for content with a foreign key relationship to sections.
+        """
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.SectionForeignKeyCommon'):
             self.assert_(self.foreign_key_article in self.sports.items)
             self.assert_(self.foreign_key_article2 in self.weather.items)
 
 
 class ComplexBackendTestCase(ArmSectionsTestCase):
-    """
-    Test fetching items for content with foreign key and many-to-many relationships to sections.
-    """
     def setUp(self):
         super(ComplexBackendTestCase, self).setUp()
 
@@ -80,14 +77,14 @@ class ComplexBackendTestCase(ArmSectionsTestCase):
         self.complex_article.related_sections = [self.weather]
 
     def test_backend_with_complex_articles(self):
+        """
+        Test fetching items for content with foreign key and many-to-many relationships to sections.
+        """
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
             self.assert_(self.complex_article in self.pro_sports.items)
             self.assert_(self.complex_article in self.weather.items)
 
 class HierarchyBackendTestCase(ArmSectionsTestCase):
-    """
-    Test fetching items for a parent section of the associated section.
-    """
     def setUp(self):
         super(HierarchyBackendTestCase, self).setUp()
 
@@ -103,23 +100,29 @@ class HierarchyBackendTestCase(ArmSectionsTestCase):
         self.complex_article.related_sections = [self.weather]
 
     def test_backend_with_section_hierarchy(self):
+        """
+        Test fetching items for a parent section of the associated section.
+        """
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
             self.assert_(self.complex_article in self.sports.items)
             self.assert_(self.complex_article in self.pro_sports.items)
 
 class ManagerTestCase(ArmSectionsTestCase):
-    """
-    Test ItemFilter.get_manager.
-    """
     def setUp(self):
         super(ManagerTestCase, self).setUp()
         self.item_filter = ItemFilter()
 
     def test_default_manager(self):
+        """
+        Test ItemFilter.get_manager with the default manager.
+        """
         self.assertEquals(self.item_filter.get_manager(ComplexCommon).__class__,
             InheritanceManager)
 
     def test_custom_manager(self):
+        """
+        Test ItemFilter.get_manager with a custom manager.
+        """
         self.item_filter.manager_attr = 'with_section'
         self.assertEquals(self.item_filter.get_manager(ComplexCommon).__class__,
             SectionSlugManager)
