@@ -46,3 +46,7 @@ class NonStandardField(models.Model):
     objects = models.Manager()
     with_section = SectionSlugManager(section_field="sections_by_another_name",
             slug_field="slugs_by_another_name")
+
+
+class CustomSection(Section):
+    pass
