@@ -10,12 +10,13 @@ class SimpleSectionView(DetailView):
     context_object_name = 'section'
     model = Section
 
-    def get_object(self):
-        return self.get_section()
+    def get_object(self, queryset=None):
+        return self.get_section(queryset=queryset)
 
-    def get_section(self):
-        return get_object_or_404(self.get_queryset(),
-                                 full_slug=self.kwargs['full_slug'])
+    def get_section(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        return get_object_or_404(queryset, full_slug=self.kwargs['full_slug'])
 
 
 class SectionFeed(Feed):
