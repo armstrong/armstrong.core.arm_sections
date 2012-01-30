@@ -66,3 +66,12 @@ class SectionsViewTestCase(ArmSectionsTestCase):
                 kwargs={'full_slug': 'not-a-section/nope/'})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
+
+    def test_view_with_custom_queryset(self):
+        url = urlresolvers.reverse(
+                'custom_section_queryset_detail',
+                kwargs={'full_slug': self.custom_section.full_slug})
+        response = self.client.get(url)
+        base_section = Section.objects.get(id=self.custom_section.id)
+        self.assertEqual(response.context['section'], self.custom_section)
+        self.assertNotEqual(response.context['section'], base_section)
