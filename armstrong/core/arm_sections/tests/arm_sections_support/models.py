@@ -72,3 +72,7 @@ class ComplexCommon(models.Model):
 
 class ComplexArticle(ComplexCommon):
     summary = models.TextField(default="Default", blank=True)
+
+
+class CustomSection(Section):
+    pass

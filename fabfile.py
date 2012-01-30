@@ -18,6 +18,7 @@ settings = {
     ),
     'ROOT_URLCONF': 'armstrong.core.arm_sections.tests.arm_sections_support.urls',
     'SITE_ID': 1,
+    'ARMSTRONG_SECTION_ITEM_MODEL': 'armstrong.core.arm_sections.tests.arm_sections_support.models.SimpleCommon',
 }
 
 full_name = "armstrong.core.arm_sections"
