@@ -87,7 +87,6 @@ setup_kwargs = {
     "namespace_packages": NAMESPACE_PACKAGES,
     "setup_requires": ["pip", ],
     "classifiers": [
-        'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',

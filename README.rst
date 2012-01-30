@@ -2,10 +2,6 @@ armstrong.core.arm_sections
 ===========================
 Provides the basic concept of sections within an Armstrong site.
 
-.. warning:: This is development level software.  Please do not unless you are
-             familiar with what that means and are comfortable using that type
-             of software.
-
 Sections give you a way to organize your content into logical groups.  Sections
 can have a parent section to allow you to create a hierarchy.  For example, the
 `Texas Tribune`_ has an Immigration section which in turns has Sanctuary Cities
