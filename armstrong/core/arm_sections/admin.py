@@ -34,6 +34,7 @@ class SectionTreeAdminMixin(object):
 
 class SectionAdmin(MPTTModelAdmin):
     exclude = ("full_slug", )
+    search_fields = ('title', 'summary')
 
 
 admin.site.register(Section, SectionAdmin)
