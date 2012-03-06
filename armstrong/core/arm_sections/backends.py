@@ -3,7 +3,7 @@ from django.db.models import Q
 
 
 class ItemFilter(object):
-    manager_attr = '_default_manager'
+    manager_attr = 'objects'
 
     def get_manager(self, model):
         """Return the desired manager for the item model."""
