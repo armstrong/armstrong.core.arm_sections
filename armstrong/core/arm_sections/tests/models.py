@@ -1,3 +1,4 @@
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.unittest import skip
 
 from ..models import Section
@@ -39,6 +40,14 @@ class ModelTestCase(ArmSectionsTestCase):
     def test_item_related_name_returns_none_with_multiple_many_to_many(self):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel'):
             self.assertEqual(self.weather.item_related_name, None)
+
+    def test_choose_field_name_returns_specified_field(self):
+        with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel'):
+            self.assertEqual(self.weather._choose_field_name('related_sections'), 'related_sections')
+
+    def test_choose_field_name_errors_with_multiple_many_to_many(self):
+        with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel'):
+            self.assertRaises(ImproperlyConfigured, self.weather._choose_field_name)
 
     def test_can_ensure_section(self):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
