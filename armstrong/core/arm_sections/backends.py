@@ -1,5 +1,6 @@
-from django.conf import settings
 from django.db.models import Q
+
+from .utils import get_section_relations
 
 
 class ItemFilter(object):
@@ -10,16 +11,7 @@ class ItemFilter(object):
         return getattr(model, self.manager_attr)
 
     def get_section_relations(self, section):
-        """Find every relationship between section and the item model."""
-        all_rels = section._meta.get_all_related_objects() + \
-                   section._meta.get_all_related_many_to_many_objects()
-        model_rels = []
-        for related in all_rels:
-            found = "%s.%s" % (related.model.__module__,
-                    related.model.__name__)
-            if found == settings.ARMSTRONG_SECTION_ITEM_MODEL:
-                model_rels.append(related)
-        return model_rels
+        return get_section_relations(section.__class__)
 
     def filter_objects_by_section(self, rels, section):
         """Build a queryset containing all objects in the section subtree."""
