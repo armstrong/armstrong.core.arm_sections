@@ -16,5 +16,5 @@ def get_section_relations(Section):
                Section._meta.get_all_related_many_to_many_objects()
     return filter_item_rels(all_rels)
 
-def get_section_many_to_many_relations (Section):
+def get_section_many_to_many_relations(Section):
 	return filter_item_rels(Section._meta.get_all_related_many_to_many_objects())
