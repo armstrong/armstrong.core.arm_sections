@@ -21,16 +21,16 @@ class SectionManager(models.Manager):
                 defaults['full_slug'] += "/"
         return super(SectionManager, self).get(**defaults)
 
-    def add_item(self, section_id, item, field_name=None):
-        section = self.get_query_set().get(pk=section_id)
+    def add_item(self, item, field_name=None, **kwargs):
+        section = self.get_query_set().get(**kwargs)
         section.add_item(item, field_name=field_name)
 
-    def remove_item(self, section_id, item, field_name=None):
-        section = self.get_query_set().get(pk=section_id)
+    def remove_item(self, item, field_name=None, **kwargs):
+        section = self.get_query_set().get(**kwargs)
         section.remove_item(item, field_name=field_name)
 
-    def set_item(self, section_id, item, test_func, field_name=None):
-        section = self.get_query_set().get(pk=section_id)
+    def set_item(self, item, test_func, field_name=None, **kwargs):
+        section = self.get_query_set().get(**kwargs)
         section.set_item(item, test_func, field_name=field_name)
 
 
