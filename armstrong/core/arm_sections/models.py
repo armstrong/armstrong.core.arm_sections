@@ -79,7 +79,7 @@ class Section(MPTTModel):
     def __unicode__(self):
         return "%s (%s)" % (self.title, self.full_slug)
 
-    def _choose_field_name(self, specified_field):
+    def _choose_field_name(self, specified_field=None):
         if specified_field is not None:
             return specified_field
         if self.item_related_name is None:
