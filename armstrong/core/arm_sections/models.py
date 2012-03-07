@@ -29,9 +29,9 @@ class SectionManager(models.Manager):
         section = self.get_query_set().get(**kwargs)
         section.remove_item(item, field_name=field_name)
 
-    def set_item(self, item, test_func, field_name=None, **kwargs):
+    def toggle_item(self, item, test_func, field_name=None, **kwargs):
         section = self.get_query_set().get(**kwargs)
-        section.set_item(item, test_func, field_name=field_name)
+        section.toggle_item(item, test_func, field_name=field_name)
 
 
 class Section(MPTTModel):
@@ -110,7 +110,7 @@ class Section(MPTTModel):
         related_manager = getattr(item, field_name)
         related_manager.remove(self)
 
-    def set_item(self, item, test_func, field_name=None):
+    def toggle_item(self, item, test_func, field_name=None):
         """
         Toggles the section based on test_func.
 
