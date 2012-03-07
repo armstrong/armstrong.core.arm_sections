@@ -50,10 +50,11 @@ class Section(MPTTModel):
 
     @property
     def item_related_name(self):
-        '''The ManyToMany field on the item class pointing to this class.
+        """
+        The ManyToMany field on the item class pointing to this class.
 
         If there is more than one field, this value will be None.
-        '''
+        """
         if not hasattr(self, '_item_related_name'):
             many_to_many_rels = \
                 get_section_many_to_many_relations(self.__class__)
@@ -88,27 +89,30 @@ class Section(MPTTModel):
         return self.item_related_name
 
     def add_item(self, item, field_name=None):
-        '''Add the item to the specified section.
+        """
+        Add the item to the specified section.
 
         Intended for use with items of settings.ARMSTRONG_SECTION_ITEM_MODEL.
         Behavior on other items is undefined.
-        '''
+        """
         field_name = self._choose_field_name(field_name)
         related_manager = getattr(item, field_name)
         related_manager.add(self)
 
     def remove_item(self, item, field_name=None):
-        '''Add the item to the specified section.
+        """
+        Add the item to the specified section.
 
         Intended for use with items of settings.ARMSTRONG_SECTION_ITEM_MODEL.
         Behavior on other items is undefined.
-        '''
+        """
         field_name = self._choose_field_name(field_name)
         related_manager = getattr(item, field_name)
         related_manager.remove(self)
 
     def set_item(self, item, test_func, field_name=None):
-        '''Toggles the section based on test_func.
+        """
+        Toggles the section based on test_func.
 
         test_func takes an item and returns a boolean. If it returns True, the
         item will be added to the given section. It will be removed from the
@@ -116,7 +120,7 @@ class Section(MPTTModel):
 
         Intended for use with items of settings.ARMSTRONG_SECTION_ITEM_MODEL.
         Behavior on other items is undefined.
-        '''
+        """
         if test_func(item):
             self.add_item(item, field_name)
             return True
