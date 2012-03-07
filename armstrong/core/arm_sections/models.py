@@ -101,7 +101,7 @@ class Section(MPTTModel):
 
     def remove_item(self, item, field_name=None):
         """
-        Add the item to the specified section.
+        Remove the item from the specified section.
 
         Intended for use with items of settings.ARMSTRONG_SECTION_ITEM_MODEL.
         Behavior on other items is undefined.
