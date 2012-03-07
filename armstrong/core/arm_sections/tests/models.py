@@ -36,14 +36,16 @@ class ModelTestCase(ArmSectionsTestCase):
     def test_can_set_section_with_true_test_func(self):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
             self.assert_(self.complex_article not in self.college.items, msg='sanity check')
-            self.college.toggle_item(self.complex_article, lambda x: True)
+            result = self.college.toggle_item(self.complex_article, lambda x: True)
             self.assert_(self.complex_article in self.college.items)
+            self.assert_(result)
 
     def test_can_set_section_with_false_test_func(self):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
             self.assert_(self.complex_article in self.weather.items, msg='sanity check')
-            self.weather.toggle_item(self.complex_article, lambda x: False)
+            result = self.weather.toggle_item(self.complex_article, lambda x: False)
             self.assert_(self.complex_article not in self.weather.items)
+            self.assert_(not result)
 
 
 class ManagerTestCase(ArmSectionsTestCase):
@@ -76,11 +78,13 @@ class ManagerTestCase(ArmSectionsTestCase):
     def test_can_toggle_section_id_with_true_test_func(self):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
             self.assert_(self.complex_article not in self.college.items, msg='sanity check')
-            Section.objects.toggle_item(self.complex_article, lambda x: True, pk=self.college.pk)
+            result = Section.objects.toggle_item(self.complex_article, lambda x: True, pk=self.college.pk)
             self.assert_(self.complex_article in self.college.items)
+            self.assert_(result)
 
     def test_can_toggle_section_id_with_false_test_func(self):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
             self.assert_(self.complex_article in self.weather.items, msg='sanity check')
-            Section.objects.toggle_item(self.complex_article, lambda x: False, pk=self.weather.pk)
+            result = Section.objects.toggle_item(self.complex_article, lambda x: False, pk=self.weather.pk)
             self.assert_(self.complex_article not in self.weather.items)
+            self.assert_(not result)

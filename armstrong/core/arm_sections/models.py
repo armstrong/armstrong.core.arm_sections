@@ -31,7 +31,7 @@ class SectionManager(models.Manager):
 
     def toggle_item(self, item, test_func, field_name=None, **kwargs):
         section = self.get_query_set().get(**kwargs)
-        section.toggle_item(item, test_func, field_name=field_name)
+        return section.toggle_item(item, test_func, field_name=field_name)
 
 
 class Section(MPTTModel):
