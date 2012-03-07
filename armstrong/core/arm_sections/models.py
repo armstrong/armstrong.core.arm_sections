@@ -21,6 +21,18 @@ class SectionManager(models.Manager):
                 defaults['full_slug'] += "/"
         return super(SectionManager, self).get(**defaults)
 
+    def add_item(self, section_id, item, field_name=None):
+        section = self.get_query_set().get(pk=section_id)
+        section.add_item(item, field_name=field_name)
+
+    def remove_item(self, section_id, item, field_name=None):
+        section = self.get_query_set().get(pk=section_id)
+        section.remove_item(item, field_name=field_name)
+
+    def set_item(self, section_id, item, test_func, field_name=None):
+        section = self.get_query_set().get(pk=section_id)
+        section.set_item(item, test_func, field_name=field_name)
+
 
 class Section(MPTTModel):
     title = models.CharField(max_length=255)
