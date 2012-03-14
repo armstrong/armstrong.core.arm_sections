@@ -12,7 +12,7 @@ from ..models import Section
 import fudge
 
 
-class ArmSectionsTestCase(ArmstrongTestCase):
+class TestCase(ArmstrongTestCase):
     def setUp(self):
         super(ArmSectionsTestCase, self).setUp()
         self.sections = []
@@ -33,3 +33,7 @@ class ArmSectionsTestCase(ArmstrongTestCase):
                     summary=summary,
                     parent=parent,
                 ))
+
+
+# TODO: Refactor the test cases to remove ArmSectionsTestCase
+ArmSectionsTestCase = TestCase
