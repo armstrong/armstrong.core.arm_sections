@@ -3,10 +3,10 @@ from django.utils.importlib import import_module
 
 
 def get_item_model_class():
-    item_model_module_name, item_model_name = \
+    module_name, class_name = \
         settings.ARMSTRONG_SECTION_ITEM_MODEL.rsplit('.', 1)
-    item_model_module = import_module(item_model_module_name)
-    return getattr(item_model_module, item_model_name)
+    module = import_module(module_name)
+    return getattr(module, class_name)
 
 def filter_item_rels(rels):
     model_rels = []
