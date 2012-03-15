@@ -2,9 +2,14 @@ from django.conf import settings
 from django.utils.importlib import import_module
 
 
+def get_module_and_model_names():
+    s = (getattr(settings, "ARMSTRONG_SECTION_ITEM_MODEL", False) or
+            "armstrong.apps.content.models.Content")
+    return s.rsplit(".", 1)
+
+
 def get_item_model_class():
-    module_name, class_name = \
-        settings.ARMSTRONG_SECTION_ITEM_MODEL.rsplit('.', 1)
+    module_name, class_name = get_module_and_model_names()
     module = import_module(module_name)
     return getattr(module, class_name)
 
