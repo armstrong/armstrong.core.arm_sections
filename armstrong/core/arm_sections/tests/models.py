@@ -27,7 +27,7 @@ class ModelTestCase(ArmSectionsTestCase):
                 slug='test_multiple_many_to_many_article',
                 primary_section=self.pro_sports,
             )
-        self.multiple_many_to_many_article.related_sections = [self.weather]
+        self.multiple_many_to_many_article.more_sections = [self.weather]
 
     def test_item_related_name_returns_many_to_many_field_name(self):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
@@ -55,11 +55,23 @@ class ModelTestCase(ArmSectionsTestCase):
             self.college.add_item(self.complex_article)
             self.assert_(self.complex_article in self.college.items)
 
+    def test_can_ensure_section_with_field_name(self):
+        with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel'):
+            self.assertNotIn(self.multiple_many_to_many_article, self.college.items, msg='sanity check')
+            self.college.add_item(self.multiple_many_to_many_article, field_name='more_sections')
+            self.assertIn(self.multiple_many_to_many_article, self.college.items)
+
     def test_can_remove_section(self):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
             self.assert_(self.complex_article in self.weather.items, msg='sanity check')
             self.weather.remove_item(self.complex_article)
             self.assert_(self.complex_article not in self.weather.items)
+
+    def test_can_remove_section_with_field_name(self):
+        with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel'):
+            self.assertIn(self.multiple_many_to_many_article, self.weather.items, msg='sanity check')
+            self.weather.remove_item(self.multiple_many_to_many_article, field_name='more_sections')
+            self.assertNotIn(self.multiple_many_to_many_article, self.college.items)
 
     def test_can_set_section_with_true_test_func(self):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
@@ -68,12 +80,26 @@ class ModelTestCase(ArmSectionsTestCase):
             self.assert_(self.complex_article in self.college.items)
             self.assert_(result)
 
+    def test_can_set_section_with_true_test_func_and_field_name(self):
+        with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel'):
+            self.assertNotIn(self.multiple_many_to_many_article, self.college.items, msg='sanity check')
+            result = self.college.toggle_item(self.multiple_many_to_many_article, lambda x: True, field_name='more_sections')
+            self.assertIn(self.multiple_many_to_many_article, self.college.items)
+            self.assertTrue(result)
+
     def test_can_set_section_with_false_test_func(self):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
             self.assert_(self.complex_article in self.weather.items, msg='sanity check')
             result = self.weather.toggle_item(self.complex_article, lambda x: False)
             self.assert_(self.complex_article not in self.weather.items)
             self.assert_(not result)
+
+    def test_can_set_section_with_false_test_func_and_field_name(self):
+        with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel'):
+            self.assertIn(self.multiple_many_to_many_article, self.weather.items, msg='sanity check')
+            result = self.weather.toggle_item(self.multiple_many_to_many_article, lambda x: False, field_name='more_sections')
+            self.assertNotIn(self.multiple_many_to_many_article, self.weather.items)
+            self.assertFalse(result)
 
 
 class ManagerTestCase(ArmSectionsTestCase):
