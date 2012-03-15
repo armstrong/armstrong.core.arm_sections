@@ -3,7 +3,7 @@ from ._utils import *
 from .. import utils
 
 
-class get_configured_item_model(TestCase):
+class get_configured_item_modelTestCase(TestCase):
     def test_returns_configured_model(self):
         m = "%s.FooBar" % self.__class__.__module__
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL=m):
