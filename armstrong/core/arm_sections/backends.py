@@ -40,3 +40,10 @@ class ItemFilter(object):
 
 
 find_related_models = ItemFilter()
+
+
+class PublishedItemFilter(ItemFilter):
+    manager_attr = 'published'
+
+
+find_related_published_models = PublishedItemFilter()

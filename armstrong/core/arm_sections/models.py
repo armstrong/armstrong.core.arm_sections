@@ -10,6 +10,10 @@ from .utils import get_section_many_to_many_relations
 SECTION_ITEM_BACKEND = GenericBackend('ARMSTRONG_SECTION_ITEM_BACKEND',
         defaults="armstrong.core.arm_sections.backends.find_related_models")\
                 .get_backend
+SECTION_PUBLISHED_BACKEND = GenericBackend(
+        'ARMSTRONG_SECTION_PUBLISHED_BACKEND',
+        defaults="armstrong.core.arm_sections.backends.find_related_published_models")\
+                .get_backend
 
 
 class SectionManager(models.Manager):
@@ -47,6 +51,10 @@ class Section(MPTTModel):
     @property
     def items(self):
         return SECTION_ITEM_BACKEND(self)
+
+    @property
+    def published(self):
+        return SECTION_PUBLISHED_BACKEND(self)
 
     @property
     def item_related_name(self):
