@@ -58,7 +58,7 @@ class SectionForeignKeyCommon(models.Model):
 
 
 class SectionForeignKeyArticle(SectionForeignKeyCommon):
-    summary = models.TextField(default="Default", blank=True)    
+    summary = models.TextField(default="Default", blank=True)
 
 
 class ComplexCommon(models.Model):
@@ -76,3 +76,6 @@ class ComplexArticle(ComplexCommon):
 
 class CustomSection(Section):
     pass
+
+class MultipleManyToManyModel(ComplexCommon):
+    more_sections = models.ManyToManyField(Section, related_name='moresections_set')
