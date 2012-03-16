@@ -73,28 +73,28 @@ class ModelTestCase(ArmSectionsTestCase):
             self.weather.remove_item(self.multiple_many_to_many_article, field_name='more_sections')
             self.assertNotIn(self.multiple_many_to_many_article, self.college.items)
 
-    def test_can_set_section_with_true_test_func(self):
+    def test_can_toggle_section_with_true_test_func(self):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
             self.assertNotIn(self.complex_article, self.college.items, msg='sanity check')
             result = self.college.toggle_item(self.complex_article, lambda x: True)
             self.assertIn(self.complex_article, self.college.items)
             self.assertTrue(result)
 
-    def test_can_set_section_with_true_test_func_and_field_name(self):
+    def test_can_toggle_section_with_true_test_func_and_field_name(self):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel'):
             self.assertNotIn(self.multiple_many_to_many_article, self.college.items, msg='sanity check')
             result = self.college.toggle_item(self.multiple_many_to_many_article, lambda x: True, field_name='more_sections')
             self.assertIn(self.multiple_many_to_many_article, self.college.items)
             self.assertTrue(result)
 
-    def test_can_set_section_with_false_test_func(self):
+    def test_can_toggle_section_with_false_test_func(self):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
             self.assertIn(self.complex_article, self.weather.items, msg='sanity check')
             result = self.weather.toggle_item(self.complex_article, lambda x: False)
             self.assertNotIn(self.complex_article, self.weather.items)
             self.assertFalse(result)
 
-    def test_can_set_section_with_false_test_func_and_field_name(self):
+    def test_can_toggle_section_with_false_test_func_and_field_name(self):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel'):
             self.assertIn(self.multiple_many_to_many_article, self.weather.items, msg='sanity check')
             result = self.weather.toggle_item(self.multiple_many_to_many_article, lambda x: False, field_name='more_sections')
