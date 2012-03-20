@@ -14,6 +14,7 @@ class ManyToManyBackendTestCase(ArmSectionsTestCase):
         super(ManyToManyBackendTestCase, self).setUp()
 
         self.sports = Section.objects.get(slug='sports')
+        self.pro_sports = Section.objects.get(slug='pro')
 
         self.article = Article.objects.create(
                 title="Test Article",
@@ -26,6 +27,12 @@ class ManyToManyBackendTestCase(ArmSectionsTestCase):
             )
         self.article2.sections = [self.sports]
 
+        self.subsection_article = Article.objects.create(
+                title="Subsection Article",
+                slug='subsection_article',
+            )
+        self.subsection_article.sections = [self.sports, self.pro_sports]
+
     def test_backend_with_articles(self):
         """
         Test fetching items for content with a many-to-many relationship to sections.
@@ -33,6 +40,13 @@ class ManyToManyBackendTestCase(ArmSectionsTestCase):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.Common'):
             self.assert_(self.article in self.sports.items)
             self.assert_(self.article2 in self.sports.items)
+
+    def test_article_in_section_and_subsection_appears_once_in_section(self):
+        with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.Common'):
+            article_in_sports = [article for article in self.sports.items if article.slug == self.subsection_article.slug]
+            article_in_pro_sports = [article for article in self.pro_sports.items if article.slug == self.subsection_article.slug]
+            self.assertEquals(len(article_in_sports), 1)
+            self.assertEquals(len(article_in_pro_sports), 1)
 
 
 class ForeignKeyBackendTestCase(ArmSectionsTestCase):
