@@ -20,7 +20,7 @@ class ItemFilter(object):
         q = Q(**kwargs_list[0])
         for kwargs in kwargs_list[1:]:
             q |= Q(**kwargs)
-        return self.get_manager(get_item_model_class()).filter(q)
+        return self.get_manager(get_item_model_class()).filter(q).distinct()
 
     def process_items(self, items):
         """
