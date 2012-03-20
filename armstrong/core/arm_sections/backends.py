@@ -39,4 +39,5 @@ class ItemFilter(object):
         return self.process_items(items)
 
 
+# Deprecated. This backend used to be a function that performed the same task.
 find_related_models = ItemFilter()

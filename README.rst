@@ -117,7 +117,7 @@ component.
 ``ARMSTRONG_SECTION_ITEM_BACKEND``
     This is used to configure which backend is used to find the items
     associated with a given ``Section``.  (default:
-    ``armstrong.core.arm_sections.backend.find_related_models``)
+    ``armstrong.core.arm_sections.backend.ItemFilter``)
 
 ``ARMSTRONG_SECTION_ITEM_MODEL``
     This is used by the default ``find_related_models`` backend to determine
