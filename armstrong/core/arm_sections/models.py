@@ -9,12 +9,12 @@ from .utils import get_section_many_to_many_relations
 
 __BACKEND_MODULE = "armstrong.core.arm_sections.backends.%s"
 SECTION_ITEM_BACKEND = (GenericBackend('ARMSTRONG_SECTION_ITEM_BACKEND',
-        defaults=__BACKEND_MODULE % "ItemFilter").
-    get_backend())
+        defaults=__BACKEND_MODULE % "ItemFilter")
+    .get_backend())
 SECTION_PUBLISHED_BACKEND = (GenericBackend(
         'ARMSTRONG_SECTION_PUBLISHED_BACKEND',
-        defaults=__BACKEND_MODULE % "PublishedItemFilter").
-    get_backend())
+        defaults=__BACKEND_MODULE % "PublishedItemFilter")
+    .get_backend())
 
 
 class SectionManager(models.Manager):
