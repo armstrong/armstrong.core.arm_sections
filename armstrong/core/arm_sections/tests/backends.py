@@ -67,6 +67,7 @@ class ComplexBackendTestCase(ArmSectionsTestCase):
         super(ComplexBackendTestCase, self).setUp()
 
         self.pro_sports = Section.objects.get(slug='pro')
+        self.sports = Section.objects.get(slug='sports')
         self.weather = Section.objects.get(slug='weather')
 
         self.complex_article = ComplexArticle.objects.create(
@@ -74,7 +75,7 @@ class ComplexBackendTestCase(ArmSectionsTestCase):
                 slug='test_complex_article',
                 primary_section=self.pro_sports
             )
-        self.complex_article.related_sections = [self.weather]
+        self.complex_article.related_sections = [self.weather, self.sports]
 
     def test_backend_with_complex_articles(self):
         """
@@ -83,6 +84,14 @@ class ComplexBackendTestCase(ArmSectionsTestCase):
         with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
             self.assert_(self.complex_article in self.pro_sports.items)
             self.assert_(self.complex_article in self.weather.items)
+
+    def test_backend_with_complex_articles_for_no_duplicates(self):
+        """
+        Ensure that there aren't duplicate items when querying complex backends
+        """
+        with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon'):
+            self.assertEquals(len(self.pro_sports.items), 1)
+            self.assertEquals(len(self.weather.items), 1)
 
 class HierarchyBackendTestCase(ArmSectionsTestCase):
     def setUp(self):
