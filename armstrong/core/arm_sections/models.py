@@ -10,10 +10,10 @@ from .utils import get_section_many_to_many_relations
 SECTION_ITEM_BACKEND = GenericBackend('ARMSTRONG_SECTION_ITEM_BACKEND',
         defaults="armstrong.core.arm_sections.backends.find_related_models")\
                 .get_backend
-SECTION_PUBLISHED_BACKEND = GenericBackend(
+SECTION_PUBLISHED_BACKEND = (GenericBackend(
         'ARMSTRONG_SECTION_PUBLISHED_BACKEND',
-        defaults="armstrong.core.arm_sections.backends.PublishedItemFilter")\
-    .get_backend()
+        defaults="armstrong.core.arm_sections.backends.PublishedItemFilter").
+    get_backend())
 
 
 class SectionManager(models.Manager):
