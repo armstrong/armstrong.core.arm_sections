@@ -12,8 +12,8 @@ SECTION_ITEM_BACKEND = GenericBackend('ARMSTRONG_SECTION_ITEM_BACKEND',
                 .get_backend
 SECTION_PUBLISHED_BACKEND = GenericBackend(
         'ARMSTRONG_SECTION_PUBLISHED_BACKEND',
-        defaults="armstrong.core.arm_sections.backends.find_related_published_models")\
-                .get_backend
+        defaults="armstrong.core.arm_sections.backends.PublishedItemFilter")\
+    .get_backend()
 
 
 class SectionManager(models.Manager):
