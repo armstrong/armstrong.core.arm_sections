@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.core.exceptions import ObjectDoesNotExist
 
 from ._utils import *
@@ -126,3 +128,44 @@ class ManagerTestCase(ArmSectionsTestCase):
         self.item_filter.manager_attr = 'with_section'
         self.assertIsA(self.item_filter.get_manager(ComplexCommon),
             SectionSlugManager)
+
+
+class PublishedBackendTestCase(ArmSectionsTestCase):
+    def setUp(self):
+        super(PublishedBackendTestCase, self).setUp()
+
+        self.sports = Section.objects.get(slug='sports')
+
+        self.article = Article.objects.create(
+                title="Test Article",
+                slug='test_article',
+                pub_date=datetime.now(),
+                pub_status='P',
+            )
+        self.article.sections = [self.sports]
+        self.article2 = Article.objects.create(
+                title="Second Article",
+                slug='second_article',
+                pub_date=datetime.now(),
+                pub_status='D',
+            )
+        self.article2.sections = [self.sports]
+        self.article3 = Article.objects.create(
+                title="Third Article",
+                slug='third_article',
+                pub_date=datetime.now() + timedelta(days=1),
+                pub_status='P',
+            )
+        self.article3.sections = [self.sports]
+
+    def test_published_doesnt_give_drafts(self):
+        with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.Common'):
+            self.assertNotIn(self.article2, self.sports.published.all())
+
+    def test_published_doesnt_give_future_articles(self):
+        with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.Common'):
+            self.assertNotIn(self.article3, self.sports.published.all())
+
+    def test_published_gives_published_article(self):
+        with override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.Common'):
+            self.assertIn(self.article, self.sports.published.all())

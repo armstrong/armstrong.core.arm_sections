@@ -1,3 +1,4 @@
+from armstrong.core.arm_content.mixins.publication import PublishedManager, PUB_STATUS_CHOICES
 from armstrong.core.arm_sections.managers import SectionSlugManager
 from armstrong.core.arm_sections.models import Section
 from django.db import models
@@ -8,8 +9,11 @@ class Common(models.Model):
     title = models.CharField(max_length=20)
     sections = models.ManyToManyField(Section)
     slug = models.SlugField()
+    pub_date = models.DateTimeField(db_index=True, null=True)
+    pub_status = models.CharField(max_length=1, choices=PUB_STATUS_CHOICES)
 
     objects = InheritanceManager()
+    published = PublishedManager()
     with_section = SectionSlugManager(section_field="sections")
 
 

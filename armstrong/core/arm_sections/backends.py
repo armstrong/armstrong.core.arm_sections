@@ -41,3 +41,7 @@ class ItemFilter(object):
 
 # Deprecated. This backend used to be a function that performed the same task.
 find_related_models = ItemFilter()
+
+
+class PublishedItemFilter(ItemFilter):
+    manager_attr = 'published'
