@@ -1,12 +1,12 @@
-rvm:
-   - 1.9.3
-before_script:
-  - sudo pip install -i http://armstrong.github.com/pypi.armstrongcms.org/index/ -r requirements/dev.txt
-  - sudo pip install .
+language: python
+python:
+ - 2.7
+install:
+  - ./.travis_setup
 env:
-  - SKIP_COVERAGE=1 SKIP_INSTALL=1
-script:
-  - fab test
+  - SKIP_COVERAGE=1 SKIP_INSTALL=1 DJANGO_VERSION=1.4
+  - SKIP_COVERAGE=1 SKIP_INSTALL=1 DJANGO_VERSION=1.3.1
+script: fab test
 notifications:
   email: false
   irc:
