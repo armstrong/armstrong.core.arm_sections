@@ -1,4 +1,3 @@
 include README.rst
 include package.json
-include requirements/*.txt
 prune build/*
