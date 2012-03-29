@@ -1,5 +1,4 @@
--r ./base.txt
 -e git://github.com/tswicegood/lettuce.git@fix-port-issues#egg=lettuce
 armstrong.core.arm_content
-armstrong.dev>=1.10.2
+armstrong.dev>=1.12.1
 django-model-utils==0.6.0
