@@ -1,11 +1,12 @@
-from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from mptt.models import MPTTModel
+from mptt.managers import TreeManager
 from mptt.fields import TreeForeignKey
 from armstrong.utils.backends import GenericBackend
 
 from .utils import get_section_many_to_many_relations
+
 
 __BACKEND_MODULE = "armstrong.core.arm_sections.backends.%s"
 SECTION_ITEM_BACKEND = (GenericBackend('ARMSTRONG_SECTION_ITEM_BACKEND',
@@ -48,6 +49,7 @@ class Section(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True)
 
     objects = SectionManager()
+    tree = TreeManager()
 
     @property
     def items(self):
