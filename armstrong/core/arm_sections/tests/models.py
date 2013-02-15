@@ -101,6 +101,22 @@ class ModelTestCase(ArmSectionsTestCase):
             self.assertNotIn(self.multiple_many_to_many_article, self.weather.items)
             self.assertFalse(result)
 
+    def test_insertion_order_of_new_root_section(self):
+        new = Section.objects.create(
+                title="A New Root",
+                slug="zzz")
+        roots = Section.tree.root_nodes()
+        self.assertEqual(new, roots[0])
+
+    def test_insertion_order_of_new_child_section(self):
+        parent = Section.objects.get(slug="sports")
+        new = Section.objects.create(
+                title="A New Sport Subsection",
+                slug="zzz",
+                parent=parent)
+        children = parent.get_children()
+        self.assertEqual(new, children[0])
+
 
 class ManagerTestCase(ArmSectionsTestCase):
     def setUp(self):
