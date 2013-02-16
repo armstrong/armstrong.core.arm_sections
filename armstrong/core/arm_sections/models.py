@@ -19,6 +19,12 @@ SECTION_PUBLISHED_BACKEND = (GenericBackend(
 
 
 class SectionManager(models.Manager):
+    def get_query_set(self):
+        """Use the same ordering as TreeManager"""
+        return super(SectionManager, self).get_query_set().order_by(
+                    self.model._mptt_meta.tree_id_attr,
+                    self.model._mptt_meta.left_attr)
+
     def get(self, **kwargs):
         defaults = {}
         defaults.update(kwargs)
