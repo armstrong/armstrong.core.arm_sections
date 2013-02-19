@@ -1,9 +1,9 @@
 {
     "name": "armstrong.core.arm_sections",
-    "version": "1.5.4",
+    "version": "1.5.5alpha.0",
     "description": "Provides the basic section objects",
     "install_requires": [
-        "Django==1.3.1,<=1.4.3",
+        "Django==1.3.1,<=1.4.4",
         "django-mptt==0.5.2",
         "armstrong.utils.backends>=1.0.0,<2.0"
     ]
