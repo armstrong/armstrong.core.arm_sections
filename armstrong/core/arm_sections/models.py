@@ -60,9 +60,6 @@ class Section(MPTTModel):
     class MPTTMeta:
         order_insertion_by = ['title']
 
-    class Meta:
-        ordering = ['full_slug']
-
     @property
     def items(self):
         return SECTION_ITEM_BACKEND(self)
