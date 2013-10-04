@@ -14,9 +14,9 @@ structure as well.
 Usage
 -----
 You need to add a ``section`` field to any model that you would like to show up
-in a given section.  For example::
+in a given section. For example::
 
-    # your models.py
+    # models.py
     from django.db import models
     from armstrong.core.arm_sections.models import Section
 
@@ -27,9 +27,7 @@ in a given section.  For example::
 
         section = models.ForeignKey(Section)
 
-You can also relate to multiple sections as well through a ``ManyToManyField``:
-
-::
+You can also relate to multiple sections as well through a ``ManyToManyField``::
 
     class MyArticle(models.Model):
         # other fields
@@ -63,9 +61,7 @@ above, you would put this in your template.
     {% load section_helpers %}
     {% section_menu section_view='section_view' %}
 
-With the following sections in your database:
-
-::
+With the following sections in your database::
 
     Politics
     Sports
@@ -74,9 +70,7 @@ With the following sections in your database:
     Fashion
 
 Using all of the example we have so far, the output from your template would
-look like this:
-
-::
+look like this::
 
     <ul class="root">
         <li>
@@ -101,23 +95,24 @@ look like this:
 
 Installation & Configuration
 ----------------------------
-We recommend installing this through the Cheese Shop.
+#. ``pip install armstrong.core.arm_sections``
 
-::
+#. Add ``armstrong.core.arm_sections`` to your ``INSTALLED_APPS``
 
-    pip install armstrong.core.arm_sections
-
-This gets you the latest released version of ``armstrong.core.arm_sections``.
 
 Configuration
 """""""""""""
-There are two setting that you can use to change the behavior of this
-component.
+There are three settings that you can use to change the behavior of this
+component and its relation to content items.
 
 ``ARMSTRONG_SECTION_ITEM_BACKEND``
     This is used to configure which backend is used to find the items
     associated with a given ``Section``.  (default:
     ``armstrong.core.arm_sections.backend.ItemFilter``)
+
+``ARMSTRONG_SECTION_PUBLISHED_BACKEND``
+    Same as the above ITEM_BACKEND except it limits to only published items.
+    (default: ``armstrong.core.arm_sections.backend.PublishedItemFilter``)
 
 ``ARMSTRONG_SECTION_ITEM_MODEL``
     This is used by the default ``find_related_models`` backend to determine
@@ -145,13 +140,13 @@ Foundation`_.
 
 To follow development, be sure to join the `Google Group`_.
 
-``armstrong.core.arm_section`` is part of the `Armstrong`_ project.  You're
+``armstrong.core.arm_sections`` is part of the `Armstrong`_ project. You're
 probably looking for that.
 
 
 License
 -------
-Copyright 2011 Bay Citizen and Texas Tribune
+Copyright 2011-2014 Bay Citizen and Texas Tribune
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
