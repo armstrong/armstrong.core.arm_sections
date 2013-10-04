@@ -12,7 +12,6 @@ settings = {
         'django.contrib.sites',
         'armstrong.core.arm_sections',
         'armstrong.core.arm_sections.tests.arm_sections_support',
-        'lettuce.django',
         'south',
         'mptt',
     ),
