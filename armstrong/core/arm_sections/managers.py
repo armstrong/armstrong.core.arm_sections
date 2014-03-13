@@ -13,8 +13,13 @@ class SectionSlugManager(models.Manager):
             slug = slug[0:-1]
         if slug[0] == "/":
             slug = slug[1:]
-        section_slug, content_slug = slug.rsplit("/", 1)
-        section_slug += "/"
+
+        try:
+            section_slug, content_slug = slug.rsplit("/", 1)
+            section_slug += "/"
+        except ValueError:
+            raise self.model.DoesNotExist
+
         kwargs = {
                 "%s__full_slug" % self.section_field: section_slug,
                 self.slug_field: content_slug,

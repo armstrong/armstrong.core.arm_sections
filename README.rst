@@ -2,44 +2,17 @@ armstrong.core.arm_sections
 ===========================
 Provides the basic concept of sections within an Armstrong site.
 
-.. warning:: This is development level software.  Please do not unless you are
-             familiar with what that means and are comfortable using that type
-             of software.
-
-Sections give you a way to organize your content into logical groups.  Sections
+You can use ``Section`` models to organize your content into a group.  Sections
 can have a parent section to allow you to create a hierarchy.  For example, the
 `Texas Tribune`_ has an Immigration section which in turns has Sanctuary Cities
 and Dream Act as children sections.
 
-Of course, you can create a flat infrastructure too if you would like.  Simply
-ignore the parent/child features present.  The parent/child relationship is
-managed through a `django-mptt`_ using a technique called *modified preordered
-tree traversal*.
-
-
-Installation & Configuration
-----------------------------
-
-::
-
-    NAME=armstrong.core.arm_sections
-    pip install -e git://github.com/armstrongcms/$NAME.git#egg=$NAME
-
-There are two settings that should be set for sections to work.  Unless you're
-using a custom content model, you should be able to use these settings without
-tweaking::
-
-    ARMSTRONG_SECTION_ITEM_BACKEND="armstrong.core.arm_sections.backend.find_related_models"
-    ARMSTRONG_SECTION_ITEM_MODEL="armstrong.apps.content.models.Content"
-
-.. note:: As of version 0.1.x that shipped with Armstrong 11.06, these settings
-          are required.  Future versions of armstrong.core.arm_sections will
-          have these both set by default.
+You are not limited to a hierarchical structure---you can create a flat
+structure as well.
 
 
 Usage
 -----
-
 You need to add a ``section`` field to any model that you would like to show up
 in a given section.  For example::
 
@@ -54,25 +27,56 @@ in a given section.  For example::
 
         section = models.ForeignKey(Section)
 
-You can also relate to multiple sections as well through a ``ManyToManyField``.
+You can also relate to multiple sections as well through a ``ManyToManyField``:
 
-To display a section view, we provide the ``SimpleSectionView``. An example is
-provided in the demo project which has the following in ``urls.py``::
+::
+
+    class MyArticle(models.Model):
+        # other fields
+        sections = models.ManyToManyField(Section)
+
+
+.. Pull this next sub-section into real documentation and expand it
+
+Displaying Sections
+"""""""""""""""""""
+You can display a section through the ``SimpleSectionView`` class-based-view
+(CBV).  The standard project template in Armstrong provides an example of how
+to configure this view.
+
+::
 
     url(r'^section/(?P<full_slug>[-\w/]+)',
             SimpleSectionView.as_view(template_name='section.html'),
             name='section_view'),
-    # renders the view identified by full_slug using section.html
 
-A template tag to render menus is provided called ``section_menu``. It can be
-customized by passing in a template, but standard usage looks like::
+
+You can use the ``{% section menu %}`` template tag to display list of all
+sections inside your template.  You must load the ``section_helpers`` template
+tags to use this.  You must provide it with a ``section_view`` kwarg that is
+associated with the section view you configure inside your URL routes.  For
+example, to display a list of sections that link to the section view created
+above, you would put this in your template.
+
+::
 
     {% load section_helpers %}
     {% section_menu section_view='section_view' %}
 
-The ``section_view`` parameter tells ``section_menu`` what view to link to for
-a given section. If your urls.py is configured as in the above example, the
-menu will render as::
+With the following sections in your database:
+
+::
+
+    Politics
+    Sports
+        Football
+        Basketball
+    Fashion
+
+Using all of the example we have so far, the output from your template would
+look like this:
+
+::
 
     <ul class="root">
         <li>
@@ -94,6 +98,33 @@ menu will render as::
         </li>
     </ul>
 
+
+Installation & Configuration
+----------------------------
+We recommend installing this through the Cheese Shop.
+
+::
+
+    pip install armstrong.core.arm_sections
+
+This gets you the latest released version of ``armstrong.core.arm_sections``.
+
+Configuration
+"""""""""""""
+There are two setting that you can use to change the behavior of this
+component.
+
+``ARMSTRONG_SECTION_ITEM_BACKEND``
+    This is used to configure which backend is used to find the items
+    associated with a given ``Section``.  (default:
+    ``armstrong.core.arm_sections.backend.ItemFilter``)
+
+``ARMSTRONG_SECTION_ITEM_MODEL``
+    This is used by the default ``find_related_models`` backend to determine
+    which model has a section associated with it. (default:
+    ``armstrong.apps.content.models.Content``)
+
+
 Contributing
 ------------
 
@@ -110,11 +141,11 @@ State of Project
 Armstrong is an open-source news platform that is freely available to any
 organization.  It is the result of a collaboration between the `Texas Tribune`_
 and `Bay Citizen`_, and a grant from the `John S. and James L. Knight
-Foundation`_.  The first stable release is scheduled for September, 2011.
+Foundation`_.
 
 To follow development, be sure to join the `Google Group`_.
 
-``armstrong.core.arm_content`` is part of the `Armstrong`_ project.  You're
+``armstrong.core.arm_section`` is part of the `Armstrong`_ project.  You're
 probably looking for that.
 
 
@@ -141,4 +172,3 @@ limitations under the License.
 .. _Google Group: http://groups.google.com/group/armstrongcms
 .. _pull request: http://help.github.com/pull-requests/
 .. _Fork it: http://help.github.com/forking/
-.. _django-mptt: https://github.com/django-mptt/django-mptt

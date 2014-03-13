@@ -1,22 +1,22 @@
-from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.views.generic import TemplateView
-from django.utils.translation import ugettext as _
+from django.views.generic import DetailView
 from django.contrib.syndication.views import Feed
+from django.shortcuts import get_object_or_404
 
 from .models import Section
 
 
-class SimpleSectionView(TemplateView):
-    well_title = None
+class SimpleSectionView(DetailView):
+    context_object_name = 'section'
+    model = Section
 
-    def get_section(self):
-        return Section.objects.get(full_slug=self.kwargs['full_slug'])
+    def get_object(self, queryset=None):
+        return self.get_section(queryset=queryset)
 
-    def get_context_data(self, **kwargs):
-        context = super(SimpleSectionView, self).get_context_data(**kwargs)
-        context["section"] = self.get_section()
-        return context
+    def get_section(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        return get_object_or_404(queryset, full_slug=self.kwargs['full_slug'])
 
 
 class SectionFeed(Feed):

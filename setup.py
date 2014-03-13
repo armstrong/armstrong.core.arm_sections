@@ -85,9 +85,8 @@ setup_kwargs = {
     "packages": packages,
     "package_data": {info["name"]: data_files, },
     "namespace_packages": NAMESPACE_PACKAGES,
-    "setup_requires": ["pip", "distribute", ],
+    "setup_requires": ["pip", ],
     "classifiers": [
-        'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
@@ -99,9 +98,3 @@ setup_kwargs = {
 
 setup_kwargs.update(info)
 setup(**setup_kwargs)
-
-import sys
-if "install" in sys.argv:
-    import pip
-    pip.main(["install", "-r", "requirements/base.txt", "-b",
-              "build-%s" % info["name"]])
