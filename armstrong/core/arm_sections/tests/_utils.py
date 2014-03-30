@@ -1,4 +1,4 @@
-from armstrong.dev.tests.utils import ArmstrongTestCase
+from armstrong.dev.tests.utils import ArmstrongTestCase, override_settings
 
 from ..models import Section
 
