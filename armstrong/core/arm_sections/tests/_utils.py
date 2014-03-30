@@ -1,15 +1,6 @@
-from datetime import datetime
-from django.core.files import File
-from django.conf import settings
-
 from armstrong.dev.tests.utils import ArmstrongTestCase
-from armstrong.dev.tests.utils.backports import *
-from armstrong.dev.tests.utils.concrete import *
-from armstrong.dev.tests.utils.users import *
 
 from ..models import Section
-
-import fudge
 
 
 class ArmSectionsTestCase(ArmstrongTestCase):

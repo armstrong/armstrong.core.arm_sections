@@ -1,9 +1,8 @@
 from arm_sections_support.models import SimpleCommon
 
-from ._utils import *
-
 from .. import utils
 from ..models import Section
+from ._utils import ArmSectionsTestCase
 
 
 def rel_field_names(rels):

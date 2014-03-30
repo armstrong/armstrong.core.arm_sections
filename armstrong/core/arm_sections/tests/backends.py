@@ -1,14 +1,12 @@
 from datetime import datetime, timedelta
+from model_utils.managers import InheritanceManager
 
-from django.core.exceptions import ObjectDoesNotExist
-
-from ._utils import *
+from ._utils import ArmSectionsTestCase
 from ..models import Section
 from arm_sections_support.models import *
 
 from armstrong.core.arm_sections.backends import ItemFilter
 from armstrong.core.arm_sections.managers import SectionSlugManager
-from model_utils.managers import InheritanceManager
 
 
 class ManyToManyBackendTestCase(ArmSectionsTestCase):

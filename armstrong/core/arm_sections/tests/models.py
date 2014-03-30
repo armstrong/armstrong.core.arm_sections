@@ -1,9 +1,7 @@
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.unittest import skip
 
+from ._utils import ArmSectionsTestCase
 from ..models import Section
-
-from ._utils import *
 from arm_sections_support.models import *
 
 

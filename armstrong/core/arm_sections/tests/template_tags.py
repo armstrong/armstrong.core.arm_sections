@@ -1,8 +1,10 @@
-from ._utils import *
-from ..models import Section
-from ..templatetags import section_helpers
+import fudge
 from django.core import urlresolvers
 from django.template import Template, Context, TemplateSyntaxError
+
+from ._utils import ArmSectionsTestCase
+from ..models import Section
+from ..templatetags import section_helpers
 
 
 def generate_stub_resolve(val):

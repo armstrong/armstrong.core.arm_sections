@@ -1,8 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 
-from ._utils import *
-from ..models import Section
+from ._utils import ArmSectionsTestCase
 from arm_sections_support.models import *
+
 
 class SectionSlugManagerTestCase(ArmSectionsTestCase):
     """
