@@ -3,7 +3,8 @@ from model_utils.managers import InheritanceManager
 
 from ._utils import ArmSectionsTestCase, override_settings
 from ..models import Section
-from arm_sections_support.models import *
+from arm_sections_support.models import (
+    Article, ComplexArticle, ComplexCommon, SectionForeignKeyArticle)
 
 from armstrong.core.arm_sections.backends import ItemFilter
 from armstrong.core.arm_sections.managers import SectionSlugManager
@@ -17,20 +18,17 @@ class ManyToManyBackendTestCase(ArmSectionsTestCase):
         self.pro_sports = Section.objects.get(slug='pro')
 
         self.article = Article.objects.create(
-                title="Test Article",
-                slug='test_article',
-            )
+            title="Test Article",
+            slug='test_article')
         self.article.sections = [self.sports]
         self.article2 = Article.objects.create(
-                title="Second Article",
-                slug='second_article',
-            )
+            title="Second Article",
+            slug='second_article')
         self.article2.sections = [self.sports]
 
         self.subsection_article = Article.objects.create(
-                title="Subsection Article",
-                slug='subsection_article',
-            )
+            title="Subsection Article",
+            slug='subsection_article')
         self.subsection_article.sections = [self.sports, self.pro_sports]
 
     @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.Common')
@@ -55,15 +53,13 @@ class ForeignKeyBackendTestCase(ArmSectionsTestCase):
         self.weather = Section.objects.get(slug='weather')
 
         self.foreign_key_article = SectionForeignKeyArticle.objects.create(
-                title="Test Foreign Key Article",
-                slug='test_foreign_key_article',
-                primary_section=self.sports
-            )
+            title="Test Foreign Key Article",
+            slug='test_foreign_key_article',
+            primary_section=self.sports)
         self.foreign_key_article2 = SectionForeignKeyArticle.objects.create(
-                title="Second Foreign Key Article",
-                slug='second_foreign_key',
-                primary_section=self.weather
-            )
+            title="Second Foreign Key Article",
+            slug='second_foreign_key',
+            primary_section=self.weather)
 
     @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.SectionForeignKeyCommon')
     def test_backend_with_foreign_key_articles(self):
@@ -80,10 +76,9 @@ class ComplexBackendTestCase(ArmSectionsTestCase):
         self.weather = Section.objects.get(slug='weather')
 
         self.complex_article = ComplexArticle.objects.create(
-                title="Test Complex Article",
-                slug='test_complex_article',
-                primary_section=self.pro_sports
-            )
+            title="Test Complex Article",
+            slug='test_complex_article',
+            primary_section=self.pro_sports)
         self.complex_article.related_sections = [self.weather, self.sports]
 
     @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
@@ -106,10 +101,9 @@ class HierarchyBackendTestCase(ArmSectionsTestCase):
         self.weather = Section.objects.get(slug='weather')
 
         self.complex_article = ComplexArticle.objects.create(
-                title="Test Complex Article",
-                slug='test_complex_article',
-                primary_section=self.pro_sports
-            )
+            title="Test Complex Article",
+            slug='test_complex_article',
+            primary_section=self.pro_sports)
         self.complex_article.related_sections = [self.weather]
 
     @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
@@ -123,19 +117,15 @@ class ManagerTestCase(ArmSectionsTestCase):
         super(ManagerTestCase, self).setUp()
         self.item_filter = ItemFilter()
 
-    def test_default_manager(self):
-        """
-        Test ItemFilter.get_manager with the default manager.
-        """
-        self.assertIsA(self.item_filter.get_manager(ComplexCommon),
+    def test_itemfilter_with_default_manager(self):
+        self.assertIsInstance(
+            self.item_filter.get_manager(ComplexCommon),
             InheritanceManager)
 
-    def test_custom_manager(self):
-        """
-        Test ItemFilter.get_manager with a custom manager.
-        """
+    def test_itemfilter_with_custom_manager(self):
         self.item_filter.manager_attr = 'with_section'
-        self.assertIsA(self.item_filter.get_manager(ComplexCommon),
+        self.assertIsInstance(
+            self.item_filter.get_manager(ComplexCommon),
             SectionSlugManager)
 
 
@@ -146,25 +136,23 @@ class PublishedBackendTestCase(ArmSectionsTestCase):
         self.sports = Section.objects.get(slug='sports')
 
         self.article = Article.objects.create(
-                title="Test Article",
-                slug='test_article',
-                pub_date=datetime.now(),
-                pub_status='P',
-            )
+            title="Test Article",
+            slug='test_article',
+            pub_date=datetime.now(),
+            pub_status='P')
         self.article.sections = [self.sports]
         self.article2 = Article.objects.create(
-                title="Second Article",
-                slug='second_article',
-                pub_date=datetime.now(),
-                pub_status='D',
-            )
+            title="Second Article",
+            slug='second_article',
+            pub_date=datetime.now(),
+            pub_status='D')
         self.article2.sections = [self.sports]
         self.article3 = Article.objects.create(
-                title="Third Article",
-                slug='third_article',
-                pub_date=datetime.now() + timedelta(days=1),
-                pub_status='P',
-            )
+            title="Third Article",
+            slug='third_article',
+            pub_date=datetime.now() + timedelta(days=1),
+            pub_status='P')
+
         self.article3.sections = [self.sports]
 
     @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.Common')

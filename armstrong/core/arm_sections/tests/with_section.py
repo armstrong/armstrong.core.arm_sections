@@ -1,7 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 
 from ._utils import ArmSectionsTestCase
-from arm_sections_support.models import *
+from arm_sections_support.models import (
+    Article, SimpleArticle, Common, SimpleCommon)
 
 
 class SectionSlugManagerTestCase(ArmSectionsTestCase):
@@ -17,42 +18,44 @@ class SectionSlugManagerTestCase(ArmSectionsTestCase):
         super(SectionSlugManagerTestCase, self).setUp()
 
         self.article = Article.objects.create(
-                title="Test Article",
-                slug='test_article',
-            )
+            title="Test Article",
+            slug='test_article')
         self.article.sections = [self.sections[1]]
         self.article2 = Article.objects.create(
-                title="Second Article",
-                slug='second_article',
-            )
+            title="Second Article",
+            slug='second_article')
         self.article2.sections = [self.sections[1]]
         self.simple_article = SimpleArticle.objects.create(
-                title="Test Simple Article",
-                slug='test_simple_article',
-                primary_section=self.sections[1]
-            )
+            title="Test Simple Article",
+            slug='test_simple_article',
+            primary_section=self.sections[1])
         self.simple_article2 = SimpleArticle.objects.create(
-                title="Second Simple Article",
-                slug='second_simple',
-                primary_section=self.sections[2]
-            )
+            title="Second Simple Article",
+            slug='second_simple',
+            primary_section=self.sections[2])
 
     def test_get_by_slug_real(self):
-        full_slug = "%s%s" % (self.sections[1].full_slug, self.simple_article.slug)
-        self.assertEqual(SimpleArticle.with_section.get_by_slug(full_slug).title,
-                         self.simple_article.title)
+        full_slug = "%s%s" % (
+            self.sections[1].full_slug, self.simple_article.slug)
+        self.assertEqual(
+            SimpleArticle.with_section.get_by_slug(full_slug).title,
+            self.simple_article.title)
 
-        full_slug = "%s%s" % (self.sections[2].full_slug, self.simple_article2.slug)
-        self.assertEqual(SimpleArticle.with_section.get_by_slug(full_slug).title,
-                         self.simple_article2.title)
+        full_slug = "%s%s" % (
+            self.sections[2].full_slug, self.simple_article2.slug)
+        self.assertEqual(
+            SimpleArticle.with_section.get_by_slug(full_slug).title,
+            self.simple_article2.title)
 
         full_slug = "%s%s" % (self.sections[1].full_slug, self.article.slug)
-        self.assertEqual(Article.with_section.get_by_slug(full_slug).title,
-                         self.article.title)
+        self.assertEqual(
+            Article.with_section.get_by_slug(full_slug).title,
+            self.article.title)
 
         full_slug = "%s%s" % (self.sections[1].full_slug, self.article2.slug)
-        self.assertEqual(Article.with_section.get_by_slug(full_slug).title,
-                         self.article2.title)
+        self.assertEqual(
+            Article.with_section.get_by_slug(full_slug).title,
+            self.article2.title)
 
     def test_get_by_slug_fake(self):
         full_slug = "%sfakearticle" % self.sections[1].full_slug
@@ -72,24 +75,29 @@ class SectionSlugManagerTestCase(ArmSectionsTestCase):
 
     def test_get_by_slug_select_subclasses(self):
         # SimpleCommon does not use the InheritanceManager
-        full_slug = "%s%s" % (self.sections[1].full_slug, self.simple_article.slug)
-        self.assertNotEqual(type(SimpleCommon.with_section.get_by_slug(full_slug)),
-                            type(self.simple_article))
+        full_slug = "%s%s" % (
+            self.sections[1].full_slug, self.simple_article.slug)
+        self.assertNotEqual(
+            type(SimpleCommon.with_section.get_by_slug(full_slug)),
+            type(self.simple_article))
 
-        self.assertNotEqual(type(SimpleCommon.with_section.get_by_slug(full_slug)),
-                            type(SimpleArticle.objects.get(pk=self.simple_article.pk)))
+        self.assertNotEqual(type(
+            SimpleCommon.with_section.get_by_slug(full_slug)),
+            type(SimpleArticle.objects.get(pk=self.simple_article.pk)))
 
-        self.assertEqual(type(SimpleCommon.with_section.get_by_slug(full_slug)),
-                         type(SimpleCommon.objects.get(pk=self.simple_article.pk)))
-
+        self.assertEqual(type(
+            SimpleCommon.with_section.get_by_slug(full_slug)),
+            type(SimpleCommon.objects.get(pk=self.simple_article.pk)))
 
         # Common has InheritanceManager
         full_slug = "%s%s" % (self.sections[1].full_slug, self.article.slug)
-        self.assertEqual(type(Common.with_section.get_by_slug(full_slug)),
-                         type(self.article))
+        self.assertEqual(
+            type(Common.with_section.get_by_slug(full_slug)),
+            type(self.article))
 
-        self.assertEqual(type(Common.with_section.get_by_slug(full_slug)),
-                         type(Article.objects.get(pk=self.article.pk)))
+        self.assertEqual(
+            type(Common.with_section.get_by_slug(full_slug)),
+            type(Article.objects.get(pk=self.article.pk)))
 
     def test_get_by_slug_multiple(self):
         """
@@ -97,13 +105,14 @@ class SectionSlugManagerTestCase(ArmSectionsTestCase):
         so we expect the first instance to be returned
         """
         dup_simple_article = SimpleArticle.objects.create(
-                title="aaaa",
-                slug='test_simple_article',
-                primary_section=self.sections[1]
-            )
-        full_slug = "%s%s" % (self.sections[1].full_slug, self.simple_article.slug)
-        self.assertEqual(SimpleArticle.with_section.get_by_slug(full_slug).title,
-                         self.simple_article.title)
+            title="aaaa",
+            slug='test_simple_article',
+            primary_section=self.sections[1])
+        full_slug = "%s%s" % (
+            self.sections[1].full_slug, self.simple_article.slug)
+        self.assertEqual(
+            SimpleArticle.with_section.get_by_slug(full_slug).title,
+            self.simple_article.title)
 
         dup_simple_article.delete()  # clean up
 

@@ -2,7 +2,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 from ._utils import ArmSectionsTestCase, override_settings
 from ..models import Section
-from arm_sections_support.models import *
+from arm_sections_support.models import ComplexArticle, MultipleManyToManyModel
 
 
 class ModelTestCase(ArmSectionsTestCase):
@@ -14,18 +14,16 @@ class ModelTestCase(ArmSectionsTestCase):
         self.college = Section.objects.get(slug='college')
 
         self.complex_article = ComplexArticle.objects.create(
-                title="Test Complex Article",
-                slug='test_complex_article',
-                primary_section=self.pro_sports,
-            )
+            title="Test Complex Article",
+            slug='test_complex_article',
+            primary_section=self.pro_sports)
         self.complex_article.related_sections = [self.weather]
 
-        self.multiple_many_to_many_article = MultipleManyToManyModel.objects.create(
-                title="Test Multple Many To Many Article",
-                slug='test_multiple_many_to_many_article',
-                primary_section=self.pro_sports,
-            )
-        self.multiple_many_to_many_article.more_sections = [self.weather]
+        self.multiple_m2m_article = MultipleManyToManyModel.objects.create(
+            title="Test Multple Many To Many Article",
+            slug='test_multiple_m2m_article',
+            primary_section=self.pro_sports)
+        self.multiple_m2m_article.more_sections = [self.weather]
 
     @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
     def test_item_related_name_returns_many_to_many_field_name(self):
@@ -122,17 +120,17 @@ class ModelTestCase(ArmSectionsTestCase):
 
     def test_insertion_order_of_new_root_section(self):
         new = Section.objects.create(
-                title="A New Root",
-                slug="zzz")
+            title="A New Root",
+            slug="zzz")
         roots = Section.tree.root_nodes()
         self.assertEqual(new, roots[0])
 
     def test_insertion_order_of_new_child_section(self):
         parent = Section.objects.get(slug="sports")
         new = Section.objects.create(
-                title="A New Sport Subsection",
-                slug="zzz",
-                parent=parent)
+            title="A New Sport Subsection",
+            slug="zzz",
+            parent=parent)
         children = parent.get_children()
         self.assertEqual(new, children[0])
 
@@ -146,18 +144,16 @@ class ManagerTestCase(ArmSectionsTestCase):
         self.college = Section.objects.get(slug='college')
 
         self.complex_article = ComplexArticle.objects.create(
-                title="Test Complex Article",
-                slug='test_complex_article',
-                primary_section=self.pro_sports,
-            )
+            title="Test Complex Article",
+            slug='test_complex_article',
+            primary_section=self.pro_sports)
         self.complex_article.related_sections = [self.weather]
 
-        self.multiple_many_to_many_article = MultipleManyToManyModel.objects.create(
-                title="Test Multple Many To Many Article",
-                slug='test_multiple_many_to_many_article',
-                primary_section=self.pro_sports,
-            )
-        self.multiple_many_to_many_article.more_sections = [self.weather]
+        self.multiple_m2m_article = MultipleManyToManyModel.objects.create(
+            title="Test Multple Many To Many Article",
+            slug='test_multiple_m2m_article',
+            primary_section=self.pro_sports)
+        self.multiple_m2m_article.more_sections = [self.weather]
 
     @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
     def test_can_ensure_section_id(self):

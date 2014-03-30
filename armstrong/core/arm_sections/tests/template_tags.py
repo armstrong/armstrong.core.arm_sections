@@ -39,9 +39,9 @@ class SectionMenuTestCase(ArmSectionsTestCase):
 
     def test_render_with_custom_template(self):
         node = section_helpers.SectionMenuNode(
-                template=generate_stub_resolve('test_sections.html'))
+            template=generate_stub_resolve('test_sections.html'))
         result = node.render(None)
-        self.assertEquals(result, u'This is the test template\n')
+        self.assertEqual(result, u'This is the test template\n')
 
     def test_render_with_node_subset(self):
         sports = self.sections[1]
@@ -56,30 +56,34 @@ class SectionMenuTestCase(ArmSectionsTestCase):
                 self.assertFalse(section.title in result)
 
     def test_section_menu_parser_empty(self):
-        template = Template("""{% load section_helpers %}
-                {% section_menu %}""")
-        section_node = template.nodelist[2]
-        all_sections = Section.objects.all().order_by('tree_id')
-        self.assertEquals(section_node.__class__,
-                section_helpers.SectionMenuNode)
-        self.assertEquals(section_node.sections, None)
-        self.assertEquals(section_node.section_view, None)
-        self.assertEquals(section_node.template, None)
+        template = Template(
+            '{% load section_helpers %}' +
+            '{% section_menu %}')
+        section_node = template.nodelist[1]
+        Section.objects.all().order_by('tree_id')
+        self.assertIsInstance(section_node, section_helpers.SectionMenuNode)
+        self.assertIsNone(section_node.sections)
+        self.assertIsNone(section_node.section_view)
+        self.assertIsNone(section_node.template)
 
     def test_section_menu_parser_template(self):
-        template = Template("""{% load section_helpers %}
-                {% section_menu template='FOO/BAR/BAZ.html' %}""")
-        section_node = template.nodelist[2]
-        self.assertEquals(section_node.template.resolve({}),
-                'FOO/BAR/BAZ.html')
+        template = Template(
+            '{% load section_helpers %}' +
+            '{% section_menu template="FOO/BAR/BAZ.html" %}')
+        section_node = template.nodelist[1]
+        self.assertEqual(
+            section_node.template.resolve({}),
+            'FOO/BAR/BAZ.html')
 
     def test_render_from_template_with_custom_template(self):
-        template = Template('{% load section_helpers %}' + \
-                '{% section_menu template="test_sections.html" %}')
+        template = Template(
+            '{% load section_helpers %}' +
+            '{% section_menu template="test_sections.html" %}')
         result = template.render(Context({}))
-        self.assertEquals(result, u'This is the test template\n')
+        self.assertEqual(result, u'This is the test template\n')
 
     def test_section_menu_parser_invalid(self):
         with self.assertRaises(TemplateSyntaxError):
-            template = Template('{% load section_helpers %}' + \
-                    '{% section_menu "test_sections.html" %}')
+            Template(
+                '{% load section_helpers %}' +
+                '{% section_menu "test_sections.html" %}')
