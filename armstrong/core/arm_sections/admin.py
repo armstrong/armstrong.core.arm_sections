@@ -18,18 +18,21 @@ class SectionTreeAdminMixin(object):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if issubclass(db_field.rel.to, MPTTModel):
             required = db_field.formfield().required
-            return TreeNodeChoiceField(queryset=db_field.rel.to.objects.all(),
-                    required=required, empty_label=EMPTY_LABEL)
+            return TreeNodeChoiceField(
+                queryset=db_field.rel.to.objects.all(),
+                required=required, empty_label=EMPTY_LABEL)
         return super(SectionTreeAdminMixin, self)\
-                .formfield_for_foreignkey(db_field, request, **kwargs)
+            .formfield_for_foreignkey(db_field, request, **kwargs)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if issubclass(db_field.rel.to, MPTTModel):
             required = db_field.formfield().required
-            return TreeNodeMultipleChoiceField(empty_label=EMPTY_LABEL,
-                    queryset=db_field.rel.to.objects.all(), required=required)
+            return TreeNodeMultipleChoiceField(
+                empty_label=EMPTY_LABEL,
+                queryset=db_field.rel.to.objects.all(),
+                required=required)
         return super(SectionTreeAdminMixin, self)\
-                .formfield_for_manytomany(db_field, request, **kwargs)
+            .formfield_for_manytomany(db_field, request, **kwargs)
 
 
 class SectionAdmin(MPTTModelAdmin):

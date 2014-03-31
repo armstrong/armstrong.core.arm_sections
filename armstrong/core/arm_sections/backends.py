@@ -15,6 +15,7 @@ class ItemFilter(object):
 
     def filter_objects_by_section(self, rels, section):
         """Build a queryset containing all objects in the section subtree."""
+
         subtree = section.get_descendants(include_self=True)
         kwargs_list = [{'%s__in' % rel.field.name: subtree} for rel in rels]
         q = Q(**kwargs_list[0])
@@ -26,8 +27,7 @@ class ItemFilter(object):
         """
         Perform extra actions on the filtered items.
 
-        Example: Further filtering the items in the section to meet a
-        custom need.
+        Example: Further filtering items in the section to meet a custom need.
         """
         if hasattr(items, 'select_subclasses'):
             items = items.select_subclasses()
