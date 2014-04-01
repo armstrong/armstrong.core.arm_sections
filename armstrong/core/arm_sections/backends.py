@@ -39,9 +39,18 @@ class ItemFilter(object):
         return self.process_items(items)
 
 
-# Deprecated. This backend used to be a function that performed the same task.
-find_related_models = ItemFilter()
-
-
 class PublishedItemFilter(ItemFilter):
     manager_attr = 'published'
+
+
+# DEPRECATED: To be removed in ArmSections 2.0
+import warnings
+
+
+class DeprecatedItemFilter(ItemFilter):
+    def __call__(self, *args, **kwargs):
+        msg = ("find_related_models() is deprecated and will be removed in " +
+               "ArmSections 2.0. Use ItemFilter.")
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
+        return super(DeprecatedItemFilter, self).__call__(*args, **kwargs)
+find_related_models = DeprecatedItemFilter
