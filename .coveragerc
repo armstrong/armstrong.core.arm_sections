@@ -1,0 +1,7 @@
+[run]
+source = armstrong.core.arm_sections
+omit = */migrations/*
+branch = True
+
+[html]
+directory = coverage
