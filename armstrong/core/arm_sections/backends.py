@@ -47,7 +47,7 @@ class PublishedItemFilter(ItemFilter):
 import warnings
 
 
-class DeprecatedItemFilter(ItemFilter):
+class DeprecatedItemFilter(ItemFilter):  # pragma: no cover
     def __call__(self, *args, **kwargs):
         msg = ("find_related_models() is deprecated and will be removed in " +
                "ArmSections 2.0. Use ItemFilter.")

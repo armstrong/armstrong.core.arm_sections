@@ -20,7 +20,7 @@ from mptt.forms import TreeNodeChoiceField, TreeNodeMultipleChoiceField
 from mptt.models import MPTTModel
 
 
-class SectionTreeAdminMixin(object):
+class SectionTreeAdminMixin(object):  # pragma: no cover
     """Form mixin for the tree display of Section <select>s"""
 
     def __init__(self, *args, **kwargs):
