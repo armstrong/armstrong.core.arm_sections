@@ -112,20 +112,18 @@ class HierarchyBackendTestCase(ArmSectionsTestCase):
         self.assert_(self.complex_article in self.pro_sports.items)
 
 
-class ManagerTestCase(ArmSectionsTestCase):
-    def setUp(self):
-        super(ManagerTestCase, self).setUp()
-        self.item_filter = ItemFilter()
-
+class ItemFilterTestCase(ArmSectionsTestCase):
     def test_itemfilter_with_default_manager(self):
+        item_filter = ItemFilter()
         self.assertIsInstance(
-            self.item_filter.get_manager(ComplexCommon),
+            item_filter.get_manager(ComplexCommon),
             InheritanceManager)
 
     def test_itemfilter_with_custom_manager(self):
-        self.item_filter.manager_attr = 'with_section'
+        item_filter = ItemFilter()
+        item_filter.manager_attr = 'with_section'
         self.assertIsInstance(
-            self.item_filter.get_manager(ComplexCommon),
+            item_filter.get_manager(ComplexCommon),
             SectionSlugManager)
 
 

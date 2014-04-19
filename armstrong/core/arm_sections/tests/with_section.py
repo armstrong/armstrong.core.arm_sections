@@ -61,16 +61,19 @@ class SectionSlugManagerTestCase(ArmSectionsTestCase):
         full_slug = "%sfakearticle" % self.sections[1].full_slug
         with self.assertRaises(ObjectDoesNotExist):
             Article.with_section.get_by_slug(full_slug)
+        with self.assertRaises(ObjectDoesNotExist):
             SimpleArticle.with_section.get_by_slug(full_slug)
 
         full_slug = "fakesection/%s" % self.simple_article.slug
         with self.assertRaises(ObjectDoesNotExist):
             Article.with_section.get_by_slug(full_slug)
+        with self.assertRaises(ObjectDoesNotExist):
             SimpleArticle.with_section.get_by_slug(full_slug)
 
         full_slug = "fakesection/fakearticle"
         with self.assertRaises(ObjectDoesNotExist):
             Article.with_section.get_by_slug(full_slug)
+        with self.assertRaises(ObjectDoesNotExist):
             SimpleArticle.with_section.get_by_slug(full_slug)
 
     def test_get_by_slug_select_subclasses(self):
@@ -128,3 +131,13 @@ class SectionSlugManagerTestCase(ArmSectionsTestCase):
         full_slug = "fakesection"
         with self.assertRaises(ObjectDoesNotExist):
             SimpleArticle.with_section.get_by_slug(full_slug)
+
+    def test_getbyslug_handles_preceding_slash(self):
+        full = "/%s%s" % (self.sections[1].full_slug, self.article.slug)
+        self.assertEqual(
+            Article.with_section.get_by_slug(full), self.article)
+
+    def test_getbyslug_handles_trailing_slash(self):
+        full = "%s%s/" % (self.sections[1].full_slug, self.article.slug)
+        self.assertEqual(
+            Article.with_section.get_by_slug(full), self.article)

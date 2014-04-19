@@ -25,6 +25,9 @@ class ModelTestCase(ArmSectionsTestCase):
             primary_section=self.pro_sports)
         self.multiple_m2m_article.more_sections = [self.weather]
 
+    def test_unicode_repr(self):
+        self.assertEqual(u"%s" % self.weather, "Weather (weather/)")
+
     @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
     def test_item_related_name_returns_many_to_many_field_name(self):
         self.assertEqual(self.weather.item_related_name, 'related_sections')
@@ -133,6 +136,24 @@ class ModelTestCase(ArmSectionsTestCase):
             parent=parent)
         children = parent.get_children()
         self.assertEqual(new, children[0])
+
+    def test_change_in_parent_slug_changes_child_full_slug(self):
+        parent = Section.objects.get(slug="sports")
+        child = Section.objects.get(slug="pro")
+        self.assertEqual(child.full_slug, "sports/pro/")
+        parent.slug = "new"
+        parent.save()
+        child = Section.objects.get(slug="pro")  # have to reload
+        self.assertEqual(child.full_slug, "new/pro/")
+
+    def test_no_change_in_parent_slug_does_not_change_child_full_slug(self):
+        parent = Section.objects.get(slug="sports")
+        child = Section.objects.get(slug="pro")
+        self.assertEqual(child.full_slug, "sports/pro/")
+        parent.slug = "sports"
+        parent.save()
+        child = Section.objects.get(slug="pro")  # have to reload
+        self.assertEqual(child.full_slug, "sports/pro/")
 
 
 class ManagerTestCase(ArmSectionsTestCase):
