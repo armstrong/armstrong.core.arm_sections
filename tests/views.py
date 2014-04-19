@@ -1,7 +1,8 @@
 from django.core import urlresolvers
 
+from armstrong.core.arm_sections.models import Section
+
 from ._utils import ArmSectionsTestCase
-from ..models import Section
 from .arm_sections_support.models import CustomSection
 
 

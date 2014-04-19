@@ -1,7 +1,8 @@
 from django.core.exceptions import ImproperlyConfigured
 
+from armstrong.core.arm_sections.models import Section
+
 from ._utils import ArmSectionsTestCase, override_settings
-from ..models import Section
 from arm_sections_support.models import ComplexArticle, MultipleManyToManyModel
 
 
@@ -28,38 +29,38 @@ class ModelTestCase(ArmSectionsTestCase):
     def test_unicode_repr(self):
         self.assertEqual(u"%s" % self.weather, "Weather (weather/)")
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.ComplexCommon')
     def test_item_related_name_returns_many_to_many_field_name(self):
         self.assertEqual(self.weather.item_related_name, 'related_sections')
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.SimpleCommon')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.SimpleCommon')
     def test_item_related_name_returns_none_without_many_to_many(self):
         self.assertEqual(self.weather.item_related_name, None)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.MultipleManyToManyModel')
     def test_item_related_name_returns_none_with_multiple_many_to_many(self):
         self.assertEqual(self.weather.item_related_name, None)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.MultipleManyToManyModel')
     def test_choose_field_name_returns_specified_field(self):
         self.assertEqual(
             self.weather._choose_field_name('related_sections'),
             'related_sections')
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.MultipleManyToManyModel')
     def test_choose_field_name_errors_with_multiple_many_to_many(self):
         self.assertRaises(
             ImproperlyConfigured,
             self.weather._choose_field_name)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.ComplexCommon')
     def test_can_ensure_section(self):
         self.assertNotIn(
             self.complex_article, self.college.items, msg='sanity check')
         self.college.add_item(self.complex_article)
         self.assertIn(self.complex_article, self.college.items)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.MultipleManyToManyModel')
     def test_can_ensure_section_with_field_name(self):
         self.assertNotIn(
             self.multiple_m2m_article, self.college.items, msg='sanity check')
@@ -67,14 +68,14 @@ class ModelTestCase(ArmSectionsTestCase):
             self.multiple_m2m_article, field_name='more_sections')
         self.assertIn(self.multiple_m2m_article, self.college.items)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.ComplexCommon')
     def test_can_remove_section(self):
         self.assertIn(
             self.complex_article, self.weather.items, msg='sanity check')
         self.weather.remove_item(self.complex_article)
         self.assertNotIn(self.complex_article, self.weather.items)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.MultipleManyToManyModel')
     def test_can_remove_section_with_field_name(self):
         self.assertIn(
             self.multiple_m2m_article, self.weather.items, msg='sanity check')
@@ -82,7 +83,7 @@ class ModelTestCase(ArmSectionsTestCase):
             self.multiple_m2m_article, field_name='more_sections')
         self.assertNotIn(self.multiple_m2m_article, self.college.items)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.ComplexCommon')
     def test_can_toggle_section_with_true_test_func(self):
         self.assertNotIn(
             self.complex_article, self.college.items, msg='sanity check')
@@ -90,7 +91,7 @@ class ModelTestCase(ArmSectionsTestCase):
         self.assertIn(self.complex_article, self.college.items)
         self.assertTrue(result)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.MultipleManyToManyModel')
     def test_can_toggle_section_with_true_test_func_and_field_name(self):
         self.assertNotIn(
             self.multiple_m2m_article, self.college.items, msg='sanity check')
@@ -101,7 +102,7 @@ class ModelTestCase(ArmSectionsTestCase):
         self.assertIn(self.multiple_m2m_article, self.college.items)
         self.assertTrue(result)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.ComplexCommon')
     def test_can_toggle_section_with_false_test_func(self):
         self.assertIn(
             self.complex_article, self.weather.items, msg='sanity check')
@@ -110,7 +111,7 @@ class ModelTestCase(ArmSectionsTestCase):
         self.assertNotIn(self.complex_article, self.weather.items)
         self.assertFalse(result)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.MultipleManyToManyModel')
     def test_can_toggle_section_with_false_test_func_and_field_name(self):
         self.assertIn(
             self.multiple_m2m_article, self.weather.items, msg='sanity check')
@@ -176,14 +177,14 @@ class ManagerTestCase(ArmSectionsTestCase):
             primary_section=self.pro_sports)
         self.multiple_m2m_article.more_sections = [self.weather]
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.ComplexCommon')
     def test_can_ensure_section_id(self):
         self.assertNotIn(
             self.complex_article, self.college.items, msg='sanity check')
         Section.objects.add_item(self.complex_article, pk=self.college.pk)
         self.assertIn(self.complex_article, self.college.items)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.MultipleManyToManyModel')
     def test_can_ensure_section_id_with_field_name(self):
         self.assertNotIn(
             self.multiple_m2m_article, self.college.items, msg='sanity check')
@@ -193,14 +194,14 @@ class ManagerTestCase(ArmSectionsTestCase):
             pk=self.college.pk)
         self.assertIn(self.multiple_m2m_article, self.college.items)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.ComplexCommon')
     def test_can_remove_section_id(self):
         self.assertIn(
             self.complex_article, self.weather.items, msg='sanity check')
         Section.objects.remove_item(self.complex_article, pk=self.weather.pk)
         self.assertNotIn(self.complex_article, self.weather.items)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.MultipleManyToManyModel')
     def test_can_remove_section_id_with_field_name(self):
         self.assertIn(
             self.multiple_m2m_article, self.weather.items, msg='sanity check')
@@ -210,7 +211,7 @@ class ManagerTestCase(ArmSectionsTestCase):
             pk=self.weather.pk)
         self.assertNotIn(self.multiple_m2m_article, self.college.items)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.ComplexCommon')
     def test_can_toggle_section_id_with_true_test_func(self):
         self.assertNotIn(
             self.complex_article, self.college.items, msg='sanity check')
@@ -219,7 +220,7 @@ class ManagerTestCase(ArmSectionsTestCase):
         self.assertIn(self.complex_article, self.college.items)
         self.assertTrue(result)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.MultipleManyToManyModel')
     def test_can_toggle_section_id_with_true_test_func_and_field_name(self):
         self.assertNotIn(
             self.multiple_m2m_article, self.college.items, msg='sanity check')
@@ -231,7 +232,7 @@ class ManagerTestCase(ArmSectionsTestCase):
         self.assertIn(self.multiple_m2m_article, self.college.items)
         self.assertTrue(result)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.ComplexCommon')
     def test_can_toggle_section_id_with_false_test_func(self):
         self.assertIn(
             self.complex_article, self.weather.items, msg='sanity check')
@@ -242,7 +243,7 @@ class ManagerTestCase(ArmSectionsTestCase):
         self.assertNotIn(self.complex_article, self.weather.items)
         self.assertFalse(result)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.MultipleManyToManyModel')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.arm_sections_support.models.MultipleManyToManyModel')
     def test_can_toggle_section_id_with_false_test_func_and_field_name(self):
         self.assertIn(
             self.multiple_m2m_article, self.weather.items, msg='sanity check')
