@@ -7,8 +7,8 @@ INSTALLED_APPS.extend([
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'mptt',
-    'tests.arm_sections_support'])
+    'tests.support'])
 
 STATIC_URL = "/static/"
-ROOT_URLCONF = 'tests.arm_sections_support.urls'
-ARMSTRONG_SECTION_ITEM_MODEL = 'tests.arm_sections_support.models.SimpleCommon'
+ROOT_URLCONF = 'tests.support.urls'
+ARMSTRONG_SECTION_ITEM_MODEL = 'tests.support.models.SimpleCommon'

@@ -3,7 +3,7 @@ from django.core import urlresolvers
 from armstrong.core.arm_sections.models import Section
 
 from ._utils import ArmSectionsTestCase
-from .arm_sections_support.models import CustomSection
+from .support.models import CustomSection
 
 
 class SectionsViewTestCase(ArmSectionsTestCase):
