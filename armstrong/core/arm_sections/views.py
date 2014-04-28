@@ -30,8 +30,9 @@ class SectionFeed(Feed):
         return section.title
 
     def link(self, section):
-        return reverse(self.section_view,
-                kwargs={'full_slug': section.full_slug})
+        return reverse(
+            self.section_view,
+            kwargs={'full_slug': section.full_slug})
 
     def description(self, section):
         return section.summary

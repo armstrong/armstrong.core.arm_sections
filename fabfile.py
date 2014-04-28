@@ -9,15 +9,13 @@ settings = {
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'django.contrib.sessions',
-        'django.contrib.sites',
         'armstrong.core.arm_sections',
         'armstrong.core.arm_sections.tests.arm_sections_support',
-        'lettuce.django',
         'south',
         'mptt',
     ),
+    'STATIC_URL': '/static/',
     'ROOT_URLCONF': 'armstrong.core.arm_sections.tests.arm_sections_support.urls',
-    'SITE_ID': 1,
     'ARMSTRONG_SECTION_ITEM_MODEL': 'armstrong.core.arm_sections.tests.arm_sections_support.models.SimpleCommon',
 }
 
