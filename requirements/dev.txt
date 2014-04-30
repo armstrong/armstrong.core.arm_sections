@@ -1,3 +1,4 @@
+https://github.com/armstrong/pypi.armstrongcms.org/raw/gh-pages/files/django-reversion-1.4.tar.gz
 armstrong.core.arm_content
 armstrong.dev>=2.0,<3.0
 fudge==1.0.3

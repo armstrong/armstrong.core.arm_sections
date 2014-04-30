@@ -2,5 +2,6 @@ include LICENSE
 include MANIFEST.in
 include README.rst
 include package.json
+recursive-include armstrong/core/arm_sections/templates *
 prune build/*
 prune tests
