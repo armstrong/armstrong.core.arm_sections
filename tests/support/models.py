@@ -32,10 +32,6 @@ class Article(Common):
     summary = models.TextField(default="Default", blank=True)
 
 
-class Photo(Common):
-    url = models.URLField(default="http://localhost/", blank=True)
-
-
 class SimpleCommon(models.Model):
     title = models.CharField(max_length=20)
     primary_section = models.ForeignKey(Section)
@@ -47,10 +43,6 @@ class SimpleCommon(models.Model):
 
 class SimpleArticle(SimpleCommon):
     summary = models.TextField(default="Default", blank=True)
-
-
-class SimplePhoto(SimpleCommon):
-    url = models.URLField(default="http://localhost/", blank=True)
 
 
 class NonStandardField(models.Model):
