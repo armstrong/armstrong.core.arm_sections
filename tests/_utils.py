@@ -1,6 +1,5 @@
 from armstrong.dev.tests.utils import ArmstrongTestCase, override_settings
-
-from ..models import Section
+from armstrong.core.arm_sections.models import Section
 
 
 class ArmSectionsTestCase(ArmstrongTestCase):

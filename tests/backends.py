@@ -1,13 +1,13 @@
 from datetime import datetime, timedelta
 from model_utils.managers import InheritanceManager
 
-from ._utils import ArmSectionsTestCase, override_settings
-from ..models import Section
-from arm_sections_support.models import (
-    Article, ComplexArticle, ComplexCommon, SectionForeignKeyArticle)
-
+from armstrong.core.arm_sections.models import Section
 from armstrong.core.arm_sections.backends import ItemFilter
 from armstrong.core.arm_sections.managers import SectionSlugManager
+
+from ._utils import ArmSectionsTestCase, override_settings
+from .support.models import (
+    Article, ComplexArticle, ComplexCommon, SectionForeignKeyArticle)
 
 
 class ManyToManyBackendTestCase(ArmSectionsTestCase):
@@ -31,12 +31,12 @@ class ManyToManyBackendTestCase(ArmSectionsTestCase):
             slug='subsection_article')
         self.subsection_article.sections = [self.sports, self.pro_sports]
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.Common')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.support.models.Common')
     def test_backend_with_articles_that_m2m_to_sections(self):
         self.assert_(self.article in self.sports.items)
         self.assert_(self.article2 in self.sports.items)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.Common')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.support.models.Common')
     def test_article_in_section_and_subsection_appears_once_in_section(self):
         slug = self.subsection_article.slug
         in_sports = [a for a in self.sports.items if a.slug == slug]
@@ -61,7 +61,7 @@ class ForeignKeyBackendTestCase(ArmSectionsTestCase):
             slug='second_foreign_key',
             primary_section=self.weather)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.SectionForeignKeyCommon')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.support.models.SectionForeignKeyCommon')
     def test_backend_with_foreign_key_articles(self):
         self.assert_(self.foreign_key_article in self.sports.items)
         self.assert_(self.foreign_key_article2 in self.weather.items)
@@ -81,12 +81,12 @@ class ComplexBackendTestCase(ArmSectionsTestCase):
             primary_section=self.pro_sports)
         self.complex_article.related_sections = [self.weather, self.sports]
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.support.models.ComplexCommon')
     def test_backend_with_m2m_and_foreign_key_articles(self):
         self.assert_(self.complex_article in self.pro_sports.items)
         self.assert_(self.complex_article in self.weather.items)
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.support.models.ComplexCommon')
     def test_backend_no_duplicates_for_complex_articles(self):
         self.assertEqual(len(self.pro_sports.items), 1)
         self.assertEqual(len(self.weather.items), 1)
@@ -106,7 +106,7 @@ class HierarchyBackendTestCase(ArmSectionsTestCase):
             primary_section=self.pro_sports)
         self.complex_article.related_sections = [self.weather]
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.ComplexCommon')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.support.models.ComplexCommon')
     def test_backend_with_parent_section_in_hierarchy(self):
         self.assert_(self.complex_article in self.sports.items)
         self.assert_(self.complex_article in self.pro_sports.items)
@@ -153,14 +153,14 @@ class PublishedBackendTestCase(ArmSectionsTestCase):
 
         self.article3.sections = [self.sports]
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.Common')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.support.models.Common')
     def test_published_doesnt_give_drafts(self):
         self.assertNotIn(self.article2, self.sports.published.all())
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.Common')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.support.models.Common')
     def test_published_doesnt_give_future_articles(self):
         self.assertNotIn(self.article3, self.sports.published.all())
 
-    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='armstrong.core.arm_sections.tests.arm_sections_support.models.Common')
+    @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.support.models.Common')
     def test_published_gives_published_article(self):
         self.assertIn(self.article, self.sports.published.all())

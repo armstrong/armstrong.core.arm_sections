@@ -1,8 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 
 from ._utils import ArmSectionsTestCase
-from arm_sections_support.models import (
-    Article, SimpleArticle, Common, SimpleCommon)
+from .support.models import Article, SimpleArticle, Common, SimpleCommon
 
 
 class SectionSlugManagerTestCase(ArmSectionsTestCase):
@@ -24,7 +23,7 @@ class SectionSlugManagerTestCase(ArmSectionsTestCase):
         self.article2 = Article.objects.create(
             title="Second Article",
             slug='second_article')
-        self.article2.sections = [self.sections[1]]
+        self.article2.sections = [self.sections[1]]  # 2??
         self.simple_article = SimpleArticle.objects.create(
             title="Test Simple Article",
             slug='test_simple_article',

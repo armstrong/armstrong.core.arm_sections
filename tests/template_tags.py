@@ -2,9 +2,10 @@ import fudge
 from django.core import urlresolvers
 from django.template import Template, Context, TemplateSyntaxError
 
+from armstrong.core.arm_sections.models import Section
+from armstrong.core.arm_sections.templatetags import section_helpers
+
 from ._utils import ArmSectionsTestCase
-from ..models import Section
-from ..templatetags import section_helpers
 
 
 def generate_stub_resolve(val):

@@ -110,9 +110,14 @@ With the following sections in your database... ::
 
 Installation & Configuration
 ----------------------------
+Supports Django 1.3, 1.4, 1.5, 1.6 on Python 2.6 and 2.7.
+(Though if you are using Django 1.3, make sure to use django-mptt<0.6.)
+
 #. ``pip install armstrong.core.arm_sections``
 
 #. Add ``armstrong.core.arm_sections`` to your ``INSTALLED_APPS``
+
+#. Run either ``syncdb`` or ``migrate`` if you are using `South`_
 
 **Optional Settings:** (Used in ``settings.py``)
 
@@ -131,6 +136,8 @@ component and its relation to content items.
 ``ARMSTRONG_SECTION_ITEM_MODEL``
     Used by the two default backends to determine which model has a section
     associated with it. (default: ``armstrong.apps.content.models.Content``)
+
+.. _South: http://south.aeracode.org/
 
 
 Contributing
