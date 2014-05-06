@@ -1,7 +1,7 @@
 from django.core.exceptions import ImproperlyConfigured
+from django.db.models.fields import FieldDoesNotExist
 
-from armstrong.core.arm_sections.models import Section
-
+from armstrong.core.arm_sections.models import BaseSection, Section
 from ._utils import ArmSectionsTestCase, override_settings
 from .support.models import ComplexArticle, MultipleManyToManyModel
 
@@ -28,6 +28,13 @@ class ModelTestCase(ArmSectionsTestCase):
 
     def test_unicode_repr(self):
         self.assertEqual(u"%s" % self.weather, "Weather (weather/)")
+
+    def test_subclass_must_define_parent_field_required_by_mptt(self):
+        class NewSection(BaseSection):
+            pass
+
+        with self.assertRaises(FieldDoesNotExist):
+            NewSection(title="one", slug="one")
 
     @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.support.models.ComplexCommon')
     def test_item_related_name_returns_many_to_many_field_name(self):
