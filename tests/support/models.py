@@ -1,17 +1,26 @@
 from django.db import models
 from model_utils.managers import InheritanceManager
 
-from armstrong.core.arm_content.mixins.publication import (
-    PublishedManager, PUB_STATUS_CHOICES)
 from armstrong.core.arm_sections.managers import SectionSlugManager
 from armstrong.core.arm_sections.models import Section
+
+
+PUB_STATUS_CHOICES = (
+    ('D', 'Draft'),
+    ('P', 'Published'),
+)
+
+
+class PublishedManager(InheritanceManager):
+    def get_query_set(self):
+        return super(PublishedManager, self).get_query_set()\
+            .filter(pub_status="P")
 
 
 class Common(models.Model):
     title = models.CharField(max_length=20)
     sections = models.ManyToManyField(Section)
     slug = models.SlugField()
-    pub_date = models.DateTimeField(db_index=True, null=True)
     pub_status = models.CharField(max_length=1, choices=PUB_STATUS_CHOICES)
 
     objects = InheritanceManager()
@@ -21,10 +30,6 @@ class Common(models.Model):
 
 class Article(Common):
     summary = models.TextField(default="Default", blank=True)
-
-
-class Photo(Common):
-    url = models.URLField(default="http://localhost/", blank=True)
 
 
 class SimpleCommon(models.Model):
@@ -38,10 +43,6 @@ class SimpleCommon(models.Model):
 
 class SimpleArticle(SimpleCommon):
     summary = models.TextField(default="Default", blank=True)
-
-
-class SimplePhoto(SimpleCommon):
-    url = models.URLField(default="http://localhost/", blank=True)
 
 
 class NonStandardField(models.Model):

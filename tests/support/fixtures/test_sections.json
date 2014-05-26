@@ -1,0 +1,92 @@
+[
+{
+  "pk": 1,
+  "model": "arm_sections.section",
+  "fields": {
+    "rght": 2,
+    "parent": null,
+    "title": "Local",
+    "level": 0,
+    "summary": "All about local",
+    "lft": 1,
+    "full_slug": "local/",
+    "tree_id": 1,
+    "slug": "local"
+  }
+},
+{
+  "pk": 2,
+  "model": "arm_sections.section",
+  "fields": {
+    "rght": 8,
+    "parent": null,
+    "title": "Sports",
+    "level": 0,
+    "summary": "All about sports",
+    "lft": 1,
+    "full_slug": "sports/",
+    "tree_id": 2,
+    "slug": "sports"
+  }
+},
+{
+  "pk": 3,
+  "model": "arm_sections.section",
+  "fields": {
+    "rght": 2,
+    "parent": null,
+    "title": "Weather",
+    "level": 0,
+    "summary": "All about weather",
+    "lft": 1,
+    "full_slug": "weather/",
+    "tree_id": 3,
+    "slug": "weather"
+  }
+},
+{
+  "pk": 4,
+  "model": "arm_sections.section",
+  "fields": {
+    "rght": 3,
+    "parent": 2,
+    "title": "College Sports",
+    "level": 1,
+    "summary": "All about college sports",
+    "lft": 2,
+    "full_slug": "sports/college/",
+    "tree_id": 2,
+    "slug": "college"
+  }
+},
+{
+  "pk": 5,
+  "model": "arm_sections.section",
+  "fields": {
+    "rght": 7,
+    "parent": 2,
+    "title": "Pro Sports",
+    "level": 1,
+    "summary": "All about pro sports",
+    "lft": 4,
+    "full_slug": "sports/pro/",
+    "tree_id": 2,
+    "slug": "pro"
+  }
+},
+{
+  "pk": 6,
+  "model": "arm_sections.section",
+  "fields": {
+    "rght": 6,
+    "parent": 5,
+    "title": "US sports",
+    "level": 2,
+    "summary": "All about US sports",
+    "lft": 5,
+    "full_slug": "sports/pro/us/",
+    "tree_id": 2,
+    "slug": "us"
+  }
+}
+]
