@@ -49,8 +49,8 @@ class BaseSection(MPTTModel):
     """
     Abstract base MPTTModel providing all Section behavior
 
-    This requires all concrete models to define a `parent` field,
-    or if you want to rename it, a field cooresponding to the `parent_attr`
+    This requires all concrete models to define a `parent` field or,
+    if you want to rename it, a field cooresponding to the `parent_attr`
     MPTTMeta option. MPTT models require this field to build the tree.
 
     """
