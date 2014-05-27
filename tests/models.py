@@ -1,4 +1,6 @@
-from django.core.exceptions import ImproperlyConfigured
+import random
+import string
+from django.core.exceptions import ImproperlyConfigured, ValidationError
 
 from armstrong.core.arm_sections.models import Section
 
@@ -28,6 +30,29 @@ class ModelTestCase(ArmSectionsTestCase):
 
     def test_unicode_repr(self):
         self.assertEqual(u"%s" % self.weather, "Weather (weather/)")
+
+    def test_too_long_slug_raises_error(self):
+        s = Section.objects.create(
+            title="a",
+            slug=''.join(random.choice(string.lowercase) for i in range(201)))
+
+        # KLUDGE use full_clean() to trigger the error because SQLite does not
+        # enforce VARCAR length and save() will succeed when it shouldn't
+        self.assertRaises(ValidationError, s.full_clean)
+
+    def test_too_long_full_slug_raises_error(self):
+        s1 = Section.objects.create(
+            title="Parent",
+            slug=''.join(random.choice(string.lowercase) for i in range(200)))
+        s2 = Section.objects.create(
+            parent=s1,
+            title="Child",
+            slug=''.join(random.choice(string.lowercase) for i in range(54)))
+
+        # KLUDGE use full_clean() to trigger the error because SQLite does not
+        # enforce VARCAR length and save() will succeed when it shouldn't
+        self.assertRaises(ValidationError, s2.full_clean)
+        self.assertEqual(len(s2.full_slug), 256)  # includes separating slashes
 
     @override_settings(ARMSTRONG_SECTION_ITEM_MODEL='tests.support.models.ComplexCommon')
     def test_item_related_name_returns_many_to_many_field_name(self):

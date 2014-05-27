@@ -48,7 +48,7 @@ class SectionManager(models.Manager):
 class Section(MPTTModel):
     title = models.CharField(max_length=255)
     summary = models.TextField(default="", blank=True)
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=200)
     full_slug = models.CharField(max_length=255, blank=True)
 
     parent = TreeForeignKey('self', null=True, blank=True)
