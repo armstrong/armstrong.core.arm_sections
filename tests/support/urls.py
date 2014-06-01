@@ -1,7 +1,7 @@
 from django.contrib import admin
 try:
     from django.conf.urls import patterns, include, url
-except ImportError:  # Django 1.3 # pragma: no cover
+except ImportError:  # DROPWITHDJANGO13 # pragma: no cover
     from django.conf.urls.defaults import patterns, include, url
 
 from armstrong.core.arm_sections.views import SimpleSectionView, SectionFeed
@@ -9,6 +9,7 @@ from .models import CustomSection
 from .views import CustomSectionView
 
 
+# DROPWITHDJANGO16
 admin.autodiscover()
 
 
