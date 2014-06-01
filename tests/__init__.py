@@ -1,6 +1,14 @@
-from .backends import *
-from .models import *
-from .template_tags import *
-from .with_section import *
-from .utils import *
-from .views import *
+from unittest import TestSuite
+
+
+def load_tests(loader, tests, pattern):
+    suite = TestSuite()
+    suite.addTests(loader.loadTestsFromNames([
+        'tests.backends',
+        'tests.models',
+        'tests.template_tags',
+        'tests.utils',
+        'tests.views',
+        'tests.with_section'
+    ]))
+    return suite
