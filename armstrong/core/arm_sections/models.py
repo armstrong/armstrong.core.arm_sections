@@ -45,16 +45,25 @@ class SectionManager(models.Manager):
         return section.toggle_item(item, test_func, field_name=field_name)
 
 
-class Section(MPTTModel):
+class BaseSection(MPTTModel):
+    """
+    Abstract base MPTTModel providing all Section behavior
+
+    This requires all concrete models to define a `parent` field or,
+    if you want to rename it, a field cooresponding to the `parent_attr`
+    MPTTMeta option. MPTT models require this field to build the tree.
+
+    """
     title = models.CharField(max_length=255)
     summary = models.TextField(default="", blank=True)
     slug = models.SlugField()
     full_slug = models.CharField(max_length=255, blank=True)
 
-    parent = TreeForeignKey('self', null=True, blank=True)
-
     objects = SectionManager()
     tree = TreeManager()
+
+    class Meta:
+        abstract = True
 
     class MPTTMeta:
         order_insertion_by = ['title']
@@ -89,7 +98,7 @@ class Section(MPTTModel):
             self.full_slug = "%s%s/" % (self.parent.full_slug, self.slug)
         else:
             self.full_slug = "%s/" % self.slug
-        obj = super(Section, self).save(*args, **kwargs)
+        obj = super(BaseSection, self).save(*args, **kwargs)
         if orig_full_slug != self.full_slug:
             for child in self.get_children():
                 child.save()
@@ -146,3 +155,7 @@ class Section(MPTTModel):
         else:
             self.remove_item(item, field_name)
             return False
+
+
+class Section(BaseSection):
+    parent = TreeForeignKey('self', null=True, blank=True)
