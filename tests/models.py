@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models.fields import FieldDoesNotExist
 
@@ -162,6 +163,16 @@ class ModelTestCase(ArmSectionsTestCase):
         parent.save()
         child = Section.objects.get(slug="pro")  # have to reload
         self.assertEqual(child.full_slug, "sports/pro/")
+
+    def test_duplicate_root_level_full_slug_raises_error(self):
+        with self.assertRaises(IntegrityError):
+            Section.objects.create(title="duplicate", slug="sports")
+
+    def test_duplicate_nested_full_slug_raises_error(self):
+        parent = Section.objects.get(slug="sports")
+        with self.assertRaises(IntegrityError):
+            Section.objects.create(
+                title="duplicate", slug="pro", parent=parent)
 
 
 class ManagerTestCase(ArmSectionsTestCase):

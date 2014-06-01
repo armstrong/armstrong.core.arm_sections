@@ -57,7 +57,7 @@ class BaseSection(MPTTModel):
     title = models.CharField(max_length=255)
     summary = models.TextField(default="", blank=True)
     slug = models.SlugField()
-    full_slug = models.CharField(max_length=255, blank=True)
+    full_slug = models.CharField(max_length=255, blank=True, unique=True)
 
     objects = SectionManager()
     tree = TreeManager()
