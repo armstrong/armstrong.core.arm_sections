@@ -1,5 +1,10 @@
 from django.conf import settings
-from django.utils.importlib import import_module
+
+try:
+    from importlib import import_module
+except ImportError:  # PY26 # pragma: no cover
+    from functools import partial
+    import_module = partial(__import__, fromlist=[''])
 
 
 def get_module_and_model_names():
