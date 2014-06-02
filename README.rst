@@ -1,5 +1,19 @@
 armstrong.core.arm_sections
 ===========================
+
+.. image:: https://travis-ci.org/armstrong/armstrong.core.arm_sections.svg?branch=master
+  :target: https://travis-ci.org/armstrong/armstrong.core.arm_sections
+  :alt: TravisCI status
+.. image:: https://coveralls.io/repos/armstrong/armstrong.core.arm_sections/badge.png
+  :target: https://coveralls.io/r/armstrong/armstrong.core.arm_sections
+  :alt: Coverage status
+.. image:: https://pypip.in/version/armstrong.core.arm_sections/badge.png
+  :target: https://pypi.python.org/pypi/armstrong.core.arm_sections/
+  :alt: PyPI Version
+.. image:: https://pypip.in/license/armstrong.core.arm_sections/badge.png
+  :target: https://pypi.python.org/pypi/armstrong.core.arm_sections/
+  :alt: License
+
 Provides content categorization within an Armstrong site.
 
 The ``Section`` model provides hierarchical organization for content, or
