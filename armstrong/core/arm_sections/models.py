@@ -1,3 +1,4 @@
+import warnings
 import django
 from django.db import models
 from django.core.exceptions import ImproperlyConfigured
@@ -27,8 +28,13 @@ class SectionManager(models.Manager):
         method = 'get_query_set' if django.VERSION < (1, 6) else 'get_queryset'
         return getattr(super(SectionManager, self), method)().order_by(*args)
 
-    if django.VERSION < (1, 6):  # DROPWITHDJANGO15
-        get_query_set = get_queryset
+    # DEPRECATED: To be removed in ArmSections 2.0 for Django 1.6+
+    def get_query_set(self):
+        if django.VERSION >= (1, 6):
+            msg = ("get_query_set() is deprecated and will be removed in "
+                   "ArmSections 2.0. Use get_queryset()")
+            warnings.warn(msg, DeprecationWarning, stacklevel=2)
+        return self.get_queryset()
 
     def get(self, **kwargs):
         defaults = {}
