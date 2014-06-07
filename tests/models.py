@@ -34,7 +34,8 @@ class ModelTestCase(ArmSectionsTestCase):
 
     def test_subclass_must_define_parent_field_required_by_mptt(self):
         class NewSection(BaseSection):
-            pass
+            class Meta:
+                app_label = 'newsection'
 
         with self.assertRaises(FieldDoesNotExist):
             NewSection(title="one", slug="one")
