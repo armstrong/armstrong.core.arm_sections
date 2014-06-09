@@ -20,7 +20,7 @@ SECTION_PUBLISHED_BACKEND = GenericBackend(
 
 
 class SectionManager(models.Manager):
-    def get_queryset(self):  # DROPWITHDJANGO15
+    def get_queryset(self):  # DROP_WITH_DJANGO15
         """Use the same ordering as TreeManager"""
 
         args = (self.model._mptt_meta.tree_id_attr,
