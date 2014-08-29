@@ -29,7 +29,7 @@ class SectionManager(models.Manager):
         return getattr(super(SectionManager, self), method)().order_by(*args)
 
     # DEPRECATED: To be removed in ArmSections 2.0 for Django 1.6+
-    def get_query_set(self):
+    def get_query_set(self):  # pragma: no cover
         if django.VERSION >= (1, 6):
             msg = ("get_query_set() is deprecated and will be removed in "
                    "ArmSections 2.0. Use get_queryset()")
