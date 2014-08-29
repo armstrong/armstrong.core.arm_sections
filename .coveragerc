@@ -1,6 +1,6 @@
 [run]
 source = armstrong.core.arm_sections
-omit = */migrations/*
+omit = */migrations/*, */south_migrations/*
 branch = True
 
 [html]
