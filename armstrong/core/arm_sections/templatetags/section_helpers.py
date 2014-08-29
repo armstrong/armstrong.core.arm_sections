@@ -1,17 +1,15 @@
-from ..models import Section
-from django.utils.safestring import mark_safe as _
+import django
 from django import template as djtemplate
 from django.template.loader import render_to_string
 from django.template.defaulttags import token_kwargs
+
+from ..models import Section
 
 register = djtemplate.Library()
 
 
 class SectionMenuNode(djtemplate.Node):
-    def __init__(self,
-            template=None,
-            section_view=None,
-            sections=None):
+    def __init__(self, template=None, section_view=None, sections=None):
         self.template = template
         self.section_view = section_view
         self.sections = sections
@@ -19,6 +17,8 @@ class SectionMenuNode(djtemplate.Node):
     def render(self, context):
         if self.template is None:
             template = 'arm_sections/sections_menu.html'
+            if django.VERSION < (1, 5):  # DROP_WITH_DJANGO14 # pragma: no cover
+                template = 'arm_sections/sections_menu_dj14.html'
         else:
             template = self.template.resolve(context)
 
@@ -27,9 +27,9 @@ class SectionMenuNode(djtemplate.Node):
         else:
             sections = self.sections.resolve(context)
 
-        dictionary = {'sections': sections,
-                      'section_view': self.section_view,
-                     }
+        dictionary = dict(
+            sections=sections,
+            section_view=self.section_view)
         return render_to_string(template, dictionary=dictionary)
 
 
@@ -43,6 +43,6 @@ def do_section_menu(parser, token):
             raise ValueError
     except ValueError:
         raise djtemplate.TemplateSyntaxError(
-                "%r tag accepts only keyword arguments" \
-                % token.contents.split()[0])
+            "%r tag accepts only keyword arguments"
+            % token.contents.split()[0])
     return SectionMenuNode(**kwargs)
