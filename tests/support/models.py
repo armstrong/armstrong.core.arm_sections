@@ -27,9 +27,15 @@ class Common(models.Model):
     published = PublishedManager()
     with_section = SectionSlugManager(section_field="sections")
 
+    class Meta:
+        app_label = 'support'
+
 
 class Article(Common):
     summary = models.TextField(default="Default", blank=True)
+
+    class Meta:
+        app_label = 'support'
 
 
 class SimpleCommon(models.Model):
@@ -40,9 +46,15 @@ class SimpleCommon(models.Model):
     objects = models.Manager()
     with_section = SectionSlugManager()
 
+    class Meta:
+        app_label = 'support'
+
 
 class SimpleArticle(SimpleCommon):
     summary = models.TextField(default="Default", blank=True)
+
+    class Meta:
+        app_label = 'support'
 
 
 class NonStandardField(models.Model):
@@ -55,6 +67,9 @@ class NonStandardField(models.Model):
         section_field="sections_by_another_name",
         slug_field="slugs_by_another_name")
 
+    class Meta:
+        app_label = 'support'
+
 
 class SectionForeignKeyCommon(models.Model):
     title = models.CharField(max_length=20)
@@ -64,9 +79,15 @@ class SectionForeignKeyCommon(models.Model):
     objects = InheritanceManager()
     with_section = SectionSlugManager()
 
+    class Meta:
+        app_label = 'support'
+
 
 class SectionForeignKeyArticle(SectionForeignKeyCommon):
     summary = models.TextField(default="Default", blank=True)
+
+    class Meta:
+        app_label = 'support'
 
 
 class ComplexCommon(models.Model):
@@ -79,15 +100,25 @@ class ComplexCommon(models.Model):
     objects = InheritanceManager()
     with_section = SectionSlugManager()
 
+    class Meta:
+        app_label = 'support'
+
 
 class ComplexArticle(ComplexCommon):
     summary = models.TextField(default="Default", blank=True)
 
+    class Meta:
+        app_label = 'support'
+
 
 class CustomSection(Section):
-    pass
+    class Meta:
+        app_label = 'support'
 
 
 class MultipleManyToManyModel(ComplexCommon):
     more_sections = models.ManyToManyField(
         Section, related_name='moresections_set')
+
+    class Meta:
+        app_label = 'support'
