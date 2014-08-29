@@ -1,5 +1,7 @@
+{# DROP_WITH_DJANGO14 #}
+{% load url from future %}
 {% load mptt_tags %}
-<ul class="arm_sections_menu root">
+<ul class="root">
     {% recursetree sections %}
         <li>
             {% if section_view %}
@@ -15,3 +17,4 @@
         </li>
     {% endrecursetree %}
 </ul>
+
