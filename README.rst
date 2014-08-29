@@ -131,7 +131,11 @@ Supports Django 1.3, 1.4, 1.5, 1.6 on Python 2.6 and 2.7.
 
 #. Add ``armstrong.core.arm_sections`` to your ``INSTALLED_APPS``
 
-#. Run either ``syncdb`` or ``migrate`` if you are using `South`_
+#. Install the database schema
+
+   * Django 1.7+ use ``manage.py migrate``
+   * previous Djangos use either ``manage.py syncdb`` or ``manage.py migrate``
+     if you are using `South`_ (in which case use South 1.0+)
 
 **Optional Settings:** (Used in ``settings.py``)
 
