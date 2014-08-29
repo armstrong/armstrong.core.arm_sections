@@ -1,3 +1,4 @@
+import django
 from django.db import models
 from model_utils.managers import InheritanceManager
 
@@ -12,9 +13,13 @@ PUB_STATUS_CHOICES = (
 
 
 class PublishedManager(InheritanceManager):
-    def get_query_set(self):
-        return super(PublishedManager, self).get_query_set()\
+    def get_queryset(self):  # DROP_WITH_DJANGO15
+        method = 'get_query_set' if django.VERSION < (1, 6) else 'get_queryset'
+        return getattr(super(PublishedManager, self), method)()\
             .filter(pub_status="P")
+
+    if django.VERSION < (1, 6):  # DROP_WITH_DJANGO15
+        get_query_set = get_queryset
 
 
 class Common(models.Model):

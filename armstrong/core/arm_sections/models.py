@@ -1,5 +1,7 @@
-from django.core.exceptions import ImproperlyConfigured
+import warnings
+import django
 from django.db import models
+from django.core.exceptions import ImproperlyConfigured
 from mptt.models import MPTTModel
 from mptt.managers import TreeManager
 from mptt.fields import TreeForeignKey
@@ -18,11 +20,21 @@ SECTION_PUBLISHED_BACKEND = GenericBackend(
 
 
 class SectionManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):  # DROP_WITH_DJANGO15
         """Use the same ordering as TreeManager"""
-        return super(SectionManager, self).get_query_set().order_by(
-            self.model._mptt_meta.tree_id_attr,
-            self.model._mptt_meta.left_attr)
+
+        args = (self.model._mptt_meta.tree_id_attr,
+                self.model._mptt_meta.left_attr)
+        method = 'get_query_set' if django.VERSION < (1, 6) else 'get_queryset'
+        return getattr(super(SectionManager, self), method)().order_by(*args)
+
+    # DEPRECATED: To be removed in ArmSections 2.0 for Django 1.6+
+    def get_query_set(self):
+        if django.VERSION >= (1, 6):
+            msg = ("get_query_set() is deprecated and will be removed in "
+                   "ArmSections 2.0. Use get_queryset()")
+            warnings.warn(msg, DeprecationWarning, stacklevel=2)
+        return self.get_queryset()
 
     def get(self, **kwargs):
         defaults = {}
@@ -33,15 +45,15 @@ class SectionManager(models.Manager):
         return super(SectionManager, self).get(**defaults)
 
     def add_item(self, item, field_name=None, **kwargs):
-        section = self.get_query_set().get(**kwargs)
+        section = self.get_queryset().get(**kwargs)
         section.add_item(item, field_name=field_name)
 
     def remove_item(self, item, field_name=None, **kwargs):
-        section = self.get_query_set().get(**kwargs)
+        section = self.get_queryset().get(**kwargs)
         section.remove_item(item, field_name=field_name)
 
     def toggle_item(self, item, test_func, field_name=None, **kwargs):
-        section = self.get_query_set().get(**kwargs)
+        section = self.get_queryset().get(**kwargs)
         return section.toggle_item(item, test_func, field_name=field_name)
 
 
