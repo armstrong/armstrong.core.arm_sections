@@ -124,7 +124,7 @@ With the following sections in your database... ::
 
 Installation & Configuration
 ----------------------------
-Supports Django 1.3, 1.4, 1.5, 1.6 on Python 2.6 and 2.7.
+Supports Django 1.3, 1.4, 1.5, 1.6, 1.7 on Python 2.6 and 2.7.
 (Though if you are using Django 1.3, make sure to use django-mptt<0.6.)
 
 #. ``pip install armstrong.core.arm_sections``
