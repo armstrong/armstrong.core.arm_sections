@@ -8,12 +8,17 @@ install:
   - pip install .
   - pip install coverage coveralls Django==$DJANGO_VERSION
 env:
-  - DJANGO_VERSION=1.6.5
-  - DJANGO_VERSION=1.5.8
-  - DJANGO_VERSION=1.4.13
+  - DJANGO_VERSION=1.7
+  - DJANGO_VERSION=1.6.7
+  - DJANGO_VERSION=1.5.10
+  - DJANGO_VERSION=1.4.15
   - DJANGO_VERSION=1.3.7
 script: coverage run -m armstrong.dev.dev_django test
 after_success: coveralls
+matrix:
+  exclude:
+    - python: 2.6
+      env: DJANGO_VERSION=1.7
 notifications:
   email: false
   irc:
