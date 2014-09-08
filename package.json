@@ -1,6 +1,6 @@
 {
     "name": "armstrong.core.arm_sections",
-    "version": "1.6.0alpha.0",
+    "version": "1.6.0",
     "description": "Provides hierarchical taxonomy for content",
     "install_requires": [
         "django-mptt>=0.5.5",
